@@ -1,312 +1,504 @@
-const SHEET_NAME = "Youcan-Orders";
-
-function doGet(e) {
-  try {
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const sheet = ss.getSheetByName(SHEET_NAME);
-
-    if (!sheet) {
-      return output(e, { success: false, error: "Sheet not found: " + SHEET_NAME });
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>VALUEMART Dashboard Fix</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
+    :root{--b:#03071E;--g:#FFD166;--m:#9ca8c7;--bd:rgba(255,255,255,.12)}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Cairo,sans-serif;background:radial-gradient(circle at top right,rgba(45,212,191,.14),transparent 30%),var(--b);color:#fff}
+    .app{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+    .hide .app{grid-template-columns:0 1fr}
+    aside{position:sticky;top:0;height:100vh;padding:20px;border-left:1px solid var(--bd);background:rgba(255,255,255,.05);overflow:hidden}
+    .hide aside{display:none}
+    .brand{border:1px solid var(--bd);border-radius:22px;padding:16px;margin-bottom:16px;background:rgba(255,255,255,.07)}
+    .brand b{font-size:22px}
+    .nav a{display:flex;justify-content:space-between;text-decoration:none;color:#eef3ff;padding:13px;border-radius:15px;font-weight:900;margin:7px 0}
+    .nav a:hover,.nav a.active{background:rgba(255,255,255,.09)}
+    main{padding:24px}
+    .top{display:flex;justify-content:space-between;gap:15px;align-items:center;margin-bottom:20px}
+    h1{margin:0;font-size:28px}
+    .sub{color:var(--m);font-weight:700}
+    .actions{display:flex;gap:10px;flex-wrap:wrap}
+    button,.pill{border:1px solid var(--bd);border-radius:999px;padding:11px 15px;font-family:Cairo;font-weight:900}
+    .btn{background:linear-gradient(135deg,var(--g),#ffb703);color:var(--b);border:0}
+    .ghost,.pill{background:rgba(255,255,255,.08);color:#fff}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.055));border:1px solid var(--bd);border-radius:22px;padding:18px;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+    .grid{display:grid;gap:16px}
+    .kpis{grid-template-columns:repeat(5,1fr)}
+    .two{grid-template-columns:1.5fr 1fr}
+    .four{grid-template-columns:repeat(4,1fr)}
+    .filter{grid-template-columns:repeat(6,1fr);align-items:end}
+    .section{margin-top:26px}
+    .head{display:flex;justify-content:space-between;margin-bottom:14px}
+    .kpi{min-height:135px}
+    .kt{color:#dbe6ff;font-weight:900}
+    .val{font-size:31px;font-weight:900;margin:18px 0 6px}
+    .note{color:var(--m);font-size:12px;font-weight:800}
+    label{display:block;color:#dbe6ff;font-size:12px;font-weight:900;margin-bottom:8px}
+    input,select{width:100%;background:rgba(3,7,30,.76);border:1px solid var(--bd);color:#fff;border-radius:15px;padding:12px;font-family:Cairo;font-weight:900}
+    input[type=date]{direction:ltr}
+    canvas{max-height:330px}
+    .chart{min-height:390px}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:12px 8px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;font-size:13px}
+    th{color:var(--g)}
+    .badge{display:inline-flex;min-width:34px;justify-content:center;background:rgba(45,212,191,.12);color:#8ff7e9;border-radius:999px;padding:4px 10px;font-weight:900}
+    .loader,.err{padding:22px;border-radius:20px;border:1px solid var(--bd);font-weight:900;text-align:center}
+    .loader{color:var(--g)}
+    .err{display:none;color:#fecdd3;background:rgba(251,113,133,.10)}
+    @media(max-width:1100px){
+      .kpis{grid-template-columns:repeat(2,1fr)}
+      .two,.four,.filter{grid-template-columns:1fr 1fr}
     }
-
-    const values = sheet.getDataRange().getValues();
-    if (values.length < 2) {
-      return output(e, {
-        success: true,
-        updatedAt: new Date().toISOString(),
-        totalRows: 0,
-        filteredRows: 0,
-        filters: getFilters(e),
-        summary: emptySummary(),
-        orders: []
-      });
+    @media(max-width:760px){
+      .app{display:block}
+      aside{display:none}
+      main{padding:14px}
+      .top{display:block}
+      .actions{margin-top:12px}
+      .kpis,.two,.four,.filter{grid-template-columns:1fr}
+      .card{border-radius:18px;padding:15px}
+      .val{font-size:27px}
+      table{display:block;overflow-x:auto;white-space:nowrap}
     }
+  </style>
+</head>
 
-    const headers = values[0].map(h => String(h).trim());
-    const rows = values.slice(1).filter(r => r.some(c => c !== "" && c !== null));
+<body>
+<div class="app">
+  <aside>
+    <div class="brand">
+      <b>VALUEMART</b>
+      <div class="sub">Dashboard Pro</div>
+    </div>
+    <div class="nav">
+      <a class="active" href="#filters">🗓️ الفلترة <b>01</b></a>
+      <a href="#overview">📊 نظرة عامة <b>02</b></a>
+      <a href="#profit">💰 الربح <b>03</b></a>
+      <a href="#charts">📈 الرسوم <b>04</b></a>
+      <a href="#tables">📋 الجداول <b>05</b></a>
+    </div>
+  </aside>
 
-    let data = rows.map(row => {
-      const obj = {};
-      headers.forEach((h, i) => obj[h] = row[i]);
-      return obj;
-    });
+  <main>
+    <div class="top">
+      <div>
+        <h1>📊 VALUEMART Growth Dashboard</h1>
+        <div class="sub">Responsive + Filter fixed + Profit by product</div>
+      </div>
+      <div class="actions">
+        <button class="ghost" onclick="toggleSide()" id="sideBtn">إخفاء القائمة ☰</button>
+        <span class="pill" id="status">⏳ كنجبد الداتا...</span>
+        <button class="btn" onclick="loadData()">تحديث 🔄</button>
+      </div>
+    </div>
 
-    const totalRows = data.length;
-    const filters = getFilters(e);
-    data = filterByDate(data, filters.start, filters.end);
+    <div id="err" class="err"></div>
+    <div id="loader" class="loader">⏳ كنجبد الطلبات من Google Sheet...</div>
 
-    return output(e, {
-      success: true,
-      updatedAt: new Date().toISOString(),
-      totalRows: totalRows,
-      filteredRows: data.length,
-      filters: filters,
-      summary: buildSummary(data),
-      orders: recentOrders(data)
-    });
-  } catch (err) {
-    return output(e, { success: false, error: String(err && err.message ? err.message : err) });
+    <div id="content" style="display:none">
+      <section id="filters" class="section">
+        <div class="head">
+          <h2>🗓️ فترة النتائج</h2>
+          <span class="sub">اختار نهار ولا سيمانة ولا شهر</span>
+        </div>
+        <div class="card">
+          <div class="grid filter">
+            <div>
+              <label>اختيار سريع</label>
+              <select id="quick" onchange="quickFilter()">
+                <option value="all">كلشي</option>
+                <option value="today">اليوم</option>
+                <option value="yesterday">البارح</option>
+                <option value="7">آخر 7 أيام</option>
+                <option value="week">هاد السيمانة</option>
+                <option value="month">هاد الشهر</option>
+              </select>
+            </div>
+            <div>
+              <label>من</label>
+              <input type="date" id="start">
+            </div>
+            <div>
+              <label>حتى</label>
+              <input type="date" id="end">
+            </div>
+            <div>
+              <button class="btn" onclick="customFilter()">طبق الفلتر</button>
+            </div>
+            <div>
+              <button class="ghost" onclick="resetFilter()">عرض كلشي</button>
+            </div>
+            <div>
+              <span class="pill" id="flabel">كلشي</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="overview" class="section">
+        <div class="head">
+          <h2>نظرة عامة</h2>
+          <span class="sub">حسب الفلتر</span>
+        </div>
+
+        <div class="grid kpis">
+          <div class="card kpi"><div class="kt">مجموع الطلبات 🛒</div><div class="val" id="totalOrders">0</div><div class="note">كل الطلبات</div></div>
+          <div class="card kpi"><div class="kt">الطلبات المؤكدة ✅</div><div class="val" id="confirmed">0</div><div class="note">Confirmed</div></div>
+          <div class="card kpi"><div class="kt">الطلبات الملغية ❌</div><div class="val" id="cancelled">0</div><div class="note">Cancelled</div></div>
+          <div class="card kpi"><div class="kt">طلبات توصلات 🚚</div><div class="val" id="delivered">0</div><div class="note">Delivered</div></div>
+          <div class="card kpi"><div class="kt">ما جاوبوش 📵</div><div class="val" id="noResponse">0</div><div class="note">Follow-up</div></div>
+        </div>
+
+        <div class="grid kpis" style="margin-top:16px">
+          <div class="card kpi"><div class="kt">Revenue Confirmed</div><div class="val" id="revenueConfirmed">0</div><div class="note">درهم</div></div>
+          <div class="card kpi"><div class="kt">Revenue Delivered</div><div class="val" id="revenueDelivered">0</div><div class="note">درهم</div></div>
+          <div class="card kpi"><div class="kt">نسبة التأكيد</div><div class="val" id="confirmationRate">0%</div><div class="note">هدفنا 70%+</div></div>
+          <div class="card kpi"><div class="kt">نسبة التوصيل</div><div class="val" id="deliveryRate">0%</div><div class="note">Confirmed → Delivered</div></div>
+          <div class="card kpi"><div class="kt">AOV</div><div class="val" id="aov">0</div><div class="note">متوسط الطلب</div></div>
+        </div>
+      </section>
+
+      <section id="profit" class="section">
+        <div class="head">
+          <h2>💰 الربح الحقيقي</h2>
+          <span class="sub">حسب الربح لكل produit</span>
+        </div>
+
+        <div class="grid four">
+          <div class="card"><label>Ad Spend $</label><input id="adSpend" type="number" value="86.77" oninput="calcProfit()"></div>
+          <div class="card"><label>USD/MAD</label><input id="usdMad" type="number" value="10" oninput="calcProfit()"></div>
+          <div class="card"><label>Spend MAD manual</label><input id="manualSpend" type="number" value="0" oninput="calcProfit()"><div class="note">إلا خليتيه 0 يحسب $×الصرف</div></div>
+          <div class="card"><label>Default profit/order</label><input id="defaultProfit" type="number" value="70" oninput="calcProfit()"></div>
+        </div>
+
+        <div class="grid kpis" style="margin-top:16px">
+          <div class="card kpi"><div class="kt">Gross Profit</div><div class="val" id="grossProfit">0</div></div>
+          <div class="card kpi"><div class="kt">Ad Spend MAD</div><div class="val" id="adSpendMad">0</div></div>
+          <div class="card kpi"><div class="kt">Net Profit</div><div class="val" id="netProfit">0</div></div>
+          <div class="card kpi"><div class="kt">Margin</div><div class="val" id="profitMargin">0%</div></div>
+          <div class="card kpi"><div class="kt">CPP الحقيقي</div><div class="val" id="realCpp">0</div></div>
+        </div>
+
+        <div class="card" style="margin-top:16px">
+          <h3>Profit by Product</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Produit</th>
+                <th>Delivered</th>
+                <th>Revenue</th>
+                <th>Profit/order</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody id="profitTable"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="charts" class="section">
+        <div class="head"><h2>📈 الرسوم</h2></div>
+        <div class="grid two">
+          <div class="card chart"><h3>Orders by day</h3><canvas id="ordersChart"></canvas></div>
+          <div class="card chart"><h3>Confirmation</h3><canvas id="confirmationChart"></canvas></div>
+        </div>
+        <div class="grid two" style="margin-top:16px">
+          <div class="card chart"><h3>Top Cities</h3><canvas id="citiesChart"></canvas></div>
+          <div class="card chart"><h3>Delivery</h3><canvas id="deliveryChart"></canvas></div>
+        </div>
+      </section>
+
+      <section id="tables" class="section">
+        <div class="head"><h2>📋 الجداول</h2></div>
+        <div class="grid two">
+          <div class="card"><h3>📍 أقوى المدن</h3><table><tbody id="citiesTable"></tbody></table></div>
+          <div class="card"><h3>👗 أقوى المنتجات</h3><table><tbody id="productsTable"></tbody></table></div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<script>
+const API_URL='https://script.google.com/macros/s/AKfycbzFgNkVD2pQy9U9LRfJlTrpk0tNQPMSoMmWH483ZCgfKmpFy3ArsQr5EV77AvzaBrleIw/exec';
+
+let data=null,charts=[],cs='',ce='';
+
+function dstr(d){
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+
+function money(n){
+  return 'DH '+new Intl.NumberFormat('fr-MA').format(Math.round(n||0));
+}
+
+function pct(n){
+  return ((n||0)*100).toFixed(1)+'%';
+}
+
+function toggleSide(){
+  document.body.classList.toggle('hide');
+  sideBtn.textContent=document.body.classList.contains('hide')?'إظهار القائمة ☰':'إخفاء القائمة ☰';
+}
+
+function quickFilter(){
+  let q=quick.value,t=new Date(),s='',e='';
+
+  if(q==='today') s=e=dstr(t);
+
+  if(q==='yesterday'){
+    let y=new Date(t);
+    y.setDate(y.getDate()-1);
+    s=e=dstr(y);
   }
-}
 
-function output(e, obj) {
-  const callback = e && e.parameter && e.parameter.callback;
-  const json = JSON.stringify(obj);
-
-  if (callback) {
-    return ContentService
-      .createTextOutput(callback + "(" + json + ");")
-      .setMimeType(ContentService.MimeType.JAVASCRIPT);
+  if(q==='7'){
+    let x=new Date(t);
+    x.setDate(x.getDate()-6);
+    s=dstr(x);
+    e=dstr(t);
   }
 
-  return ContentService
-    .createTextOutput(json)
-    .setMimeType(ContentService.MimeType.JSON);
+  if(q==='week'){
+    let x=new Date(t),day=x.getDay()||7;
+    x.setDate(x.getDate()-day+1);
+    s=dstr(x);
+    e=dstr(t);
+  }
+
+  if(q==='month'){
+    s=dstr(new Date(t.getFullYear(),t.getMonth(),1));
+    e=dstr(t);
+  }
+
+  start.value=s;
+  end.value=e;
+  cs=s;
+  ce=e;
+  label();
+  loadData();
 }
 
-function getFilters(e) {
-  return {
-    start: e && e.parameter && e.parameter.start ? String(e.parameter.start) : "",
-    end: e && e.parameter && e.parameter.end ? String(e.parameter.end) : ""
-  };
+function customFilter(){
+  cs=start.value;
+  ce=end.value;
+  quick.value='all';
+  label();
+  loadData();
 }
 
-function filterByDate(data, start, end) {
-  if (!start && !end) return data;
-
-  const startDate = start ? new Date(start + "T00:00:00") : null;
-  const endDate = end ? new Date(end + "T23:59:59") : null;
-
-  return data.filter(o => {
-    const d = parseOrderDate(o["Order date"]);
-    if (!d) return false;
-    if (startDate && d < startDate) return false;
-    if (endDate && d > endDate) return false;
-    return true;
-  });
+function resetFilter(){
+  cs='';
+  ce='';
+  start.value='';
+  end.value='';
+  quick.value='all';
+  label();
+  loadData();
 }
 
-function parseOrderDate(raw) {
-  if (!raw) return null;
-  if (raw instanceof Date) return raw;
-  const s = String(raw).trim();
-  const d = new Date(s.replace(" ", "T"));
-  return isNaN(d.getTime()) ? null : d;
+function label(){
+  flabel.textContent=(!cs&&!ce)?'كلشي':(cs||'...')+' → '+(ce||'...');
 }
 
-function emptySummary() {
-  return {
-    totalOrders: 0,
-    confirmed: 0,
-    cancelled: 0,
-    noResponse: 0,
-    delivered: 0,
-    deliveryCancelled: 0,
-    deliveryNoResponse: 0,
-    deliveryReported: 0,
-    revenueConfirmed: 0,
-    revenueDelivered: 0,
-    confirmationRate: 0,
-    deliveryRate: 0,
-    aov: 0,
-    realAovDelivered: 0,
-    topCities: [],
-    topProducts: [],
-    topVariants: [],
-    ordersByDay: [],
-    confirmationStatus: [],
-    deliveryStatus: [],
-    productDelivered: []
-  };
+function loadData(){
+  data=null;
+  loader.style.display='block';
+  content.style.display='none';
+  err.style.display='none';
+  status.textContent='⏳ كنجبد الداتا...';
+
+  let old=document.getElementById('jsonp');
+  if(old) old.remove();
+
+  let u=API_URL+'?callback=handleData&v='+Date.now();
+  if(cs) u+='&start='+encodeURIComponent(cs);
+  if(ce) u+='&end='+encodeURIComponent(ce);
+
+  let s=document.createElement('script');
+  s.id='jsonp';
+  s.src=u;
+  s.onerror=()=>showErr('API failed. دير New deploy ف Apps Script.');
+  document.body.appendChild(s);
+
+  setTimeout(()=>{
+    if(!data) showErr('Timeout: ما وصلاتش الداتا.');
+  },12000);
 }
 
-function buildSummary(data) {
-  const totalOrders = data.length;
-  const confirmed = data.filter(o => isConfirmed(o["Confirmation"])).length;
-  const cancelled = data.filter(o => isCancelled(o["Confirmation"])).length;
-  const noResponse = data.filter(o => isNoResponse(o["Confirmation"])).length;
+function handleData(res){
+  if(!res||!res.success){
+    showErr(res&&res.error?res.error:'API error');
+    return;
+  }
 
-  const delivered = data.filter(o => isDelivered(o["Delivred"])).length;
-  const deliveryCancelled = data.filter(o => isCancelled(o["Delivred"])).length;
-  const deliveryNoResponse = data.filter(o => isNoResponse(o["Delivred"])).length;
-  const deliveryReported = data.filter(o => clean(o["Delivred"]).includes("reporte")).length;
-
-  const revenueConfirmed = data
-    .filter(o => isConfirmed(o["Confirmation"]))
-    .reduce((sum, o) => sum + toNumber(o["price"]), 0);
-
-  const revenueDelivered = data
-    .filter(o => isDelivered(o["Delivred"]))
-    .reduce((sum, o) => sum + toNumber(o["price"]), 0);
-
-  return {
-    totalOrders,
-    confirmed,
-    cancelled,
-    noResponse,
-    delivered,
-    deliveryCancelled,
-    deliveryNoResponse,
-    deliveryReported,
-    revenueConfirmed,
-    revenueDelivered,
-    confirmationRate: totalOrders ? confirmed / totalOrders : 0,
-    deliveryRate: confirmed ? delivered / confirmed : 0,
-    aov: confirmed ? revenueConfirmed / confirmed : 0,
-    realAovDelivered: delivered ? revenueDelivered / delivered : 0,
-    topCities: countTop(data, "City", true),
-    topProducts: countTop(data, "Product name", false),
-    topVariants: countTop(data, "Product variant", false),
-    ordersByDay: ordersByDay(data),
-    confirmationStatus: statusCount(data, "Confirmation"),
-    deliveryStatus: statusCount(data, "Delivred"),
-    productDelivered: productDeliveredStats(data)
-  };
+  data=res;
+  render(res.summary);
+  loader.style.display='none';
+  content.style.display='block';
+  status.textContent='✅ آخر تحديث: '+new Date(res.updatedAt).toLocaleString('fr-MA');
 }
 
-function clean(value) {
-  return String(value || "").trim().toLowerCase();
+function showErr(m){
+  loader.style.display='none';
+  content.style.display='none';
+  err.style.display='block';
+  err.textContent='❌ '+m;
+  status.textContent='API Error';
 }
 
-function isConfirmed(value) {
-  return clean(value).includes("confirmer");
+function render(s){
+  totalOrders.textContent=s.totalOrders||0;
+  confirmed.textContent=s.confirmed||0;
+  cancelled.textContent=s.cancelled||0;
+  delivered.textContent=s.delivered||0;
+  noResponse.textContent=s.noResponse||0;
+
+  revenueConfirmed.textContent=money(s.revenueConfirmed);
+  revenueDelivered.textContent=money(s.revenueDelivered);
+  confirmationRate.textContent=pct(s.confirmationRate);
+  deliveryRate.textContent=pct(s.deliveryRate);
+  aov.textContent=money(s.aov);
+
+  citiesTable.innerHTML=(s.topCities||[]).map(x=>
+    '<tr><td>'+x.name+'</td><td><span class="badge">'+x.count+'</span></td></tr>'
+  ).join('');
+
+  productsTable.innerHTML=(s.topProducts||[]).map(x=>
+    '<tr><td>'+x.name+'</td><td><span class="badge">'+x.count+'</span></td></tr>'
+  ).join('');
+
+  profitTable.innerHTML=(s.productDelivered||[]).map(x=>{
+    let k=key(x.name),v=localStorage.getItem(k)||defaultProfit.value;
+    return '<tr><td>'+x.name+'</td><td><span class="badge">'+x.delivered+'</span></td><td>'+money(x.revenue)+'</td><td><input data-k="'+k+'" data-d="'+x.delivered+'" class="pp" type="number" value="'+v+'" oninput="localStorage.setItem(this.dataset.k,this.value);calcProfit()"></td><td class="pt">0</td></tr>';
+  }).join('');
+
+  draw(s);
+  calcProfit();
 }
 
-function isCancelled(value) {
-  return clean(value).includes("annuler");
+function key(p){
+  return 'vm_'+btoa(unescape(encodeURIComponent(p))).replace(/=/g,'');
 }
 
-function isDelivered(value) {
-  return clean(value).includes("livree");
-}
+function calcProfit(){
+  if(!data) return;
 
-function isNoResponse(value) {
-  const s = clean(value);
-  return s.includes("pas de réponse") ||
-         s.includes("pas de reponse") ||
-         s.includes("reminder") ||
-         s.includes("appel pas de reponse");
-}
+  let s=data.summary;
+  let sp=Number(manualSpend.value||0)||Number(adSpend.value||0)*Number(usdMad.value||0);
+  let g=0;
 
-function toNumber(value) {
-  if (typeof value === "number") return value;
-  return Number(String(value || "0").replace(",", ".").replace(/[^\d.]/g, "")) || 0;
-}
-
-function normalizeCity(city) {
-  let c = String(city || "Unknown").trim();
-  if (!c) return "Unknown";
-
-  let lower = c.toLowerCase()
-    .replace(/\s+/g, " ")
-    .replace(/[‏\u200f\u200e]/g, "")
-    .trim();
-
-  const map = {
-    "marrakech": "Marrakech",
-    "marakeche": "Marrakech",
-    "marrakesh": "Marrakech",
-    "مراكش": "Marrakech",
-    "مركش": "Marrakech",
-    "ايت اورير مراكش": "Marrakech",
-    "casablanca": "Casablanca",
-    "casablanca ": "Casablanca",
-    "الدار البيضاء": "Casablanca",
-    "casa": "Casablanca",
-    "rabat": "Rabat",
-    "الرباط": "Rabat",
-    "fes": "Fes",
-    "فاس": "Fes",
-    "agadir": "Agadir",
-    "ait meloul": "Agadir",
-    "أكادير": "Agadir",
-    "sale": "Sale",
-    "سلا": "Sale",
-    "tanger": "Tanger",
-    "طنجة": "Tanger",
-    "meknes": "Meknes",
-    "meknès": "Meknes",
-    "مكناس": "Meknes",
-    "safi": "Safi",
-    "اسفي": "Safi"
-  };
-  return map[lower] || c;
-}
-
-function countTop(data, key, normalizeCities) {
-  const map = {};
-  data.forEach(o => {
-    let value = String(o[key] || "Unknown").trim();
-    if (normalizeCities) value = normalizeCity(value);
-    if (!value) return;
-    map[value] = (map[value] || 0) + 1;
+  document.querySelectorAll('.pp').forEach(i=>{
+    let t=Number(i.value||0)*Number(i.dataset.d||0);
+    g+=t;
+    i.closest('tr').querySelector('.pt').textContent=money(t);
   });
 
-  return Object.entries(map)
-    .map(([name, count]) => ({ name, count }))
-    .sort((a, b) => b.count - a.count)
-    .slice(0, 10);
+  grossProfit.textContent=money(g);
+  adSpendMad.textContent=money(sp);
+  netProfit.textContent=money(g-sp);
+  profitMargin.textContent=pct(s.revenueDelivered?(g-sp)/s.revenueDelivered:0);
+  realCpp.textContent=money(s.delivered?sp/s.delivered:0);
 }
 
-function statusCount(data, key) {
-  const map = {};
-  data.forEach(o => {
-    let value = String(o[key] || "").trim();
-    if (!value) value = "فارغ";
-    map[value] = (map[value] || 0) + 1;
-  });
-
-  return Object.entries(map)
-    .map(([name, count]) => ({ name, count }))
-    .sort((a, b) => b.count - a.count);
+function clearCharts(){
+  charts.forEach(c=>c.destroy());
+  charts=[];
 }
 
-function ordersByDay(data) {
-  const map = {};
-  data.forEach(o => {
-    const d = parseOrderDate(o["Order date"]);
-    if (!d) return;
-    const dateKey = Utilities.formatDate(d, Session.getScriptTimeZone(), "yyyy-MM-dd");
-    map[dateKey] = (map[dateKey] || 0) + 1;
-  });
-
-  return Object.entries(map)
-    .map(([date, count]) => ({ date, count }))
-    .sort((a, b) => a.date.localeCompare(b.date));
-}
-
-function productDeliveredStats(data) {
-  const map = {};
-  data.forEach(o => {
-    if (!isDelivered(o["Delivred"])) return;
-    const product = String(o["Product name"] || "Unknown").trim();
-    const price = toNumber(o["price"]);
-
-    if (!map[product]) {
-      map[product] = { name: product, delivered: 0, revenue: 0 };
+function opt(p){
+  let o={
+    responsive:true,
+    maintainAspectRatio:false,
+    plugins:{
+      legend:{
+        position:p?'bottom':'top',
+        labels:{
+          color:'#dce5ff',
+          font:{family:'Cairo',weight:'700'}
+        }
+      }
     }
+  };
 
-    map[product].delivered += 1;
-    map[product].revenue += price;
-  });
+  if(!p){
+    o.scales={
+      x:{ticks:{color:'#9ca8c7'},grid:{color:'rgba(255,255,255,.05)'}},
+      y:{beginAtZero:true,ticks:{color:'#9ca8c7',precision:0},grid:{color:'rgba(255,255,255,.05)'}}
+    };
+  }
 
-  return Object.values(map).sort((a, b) => b.delivered - a.delivered);
+  return o;
 }
 
-function recentOrders(data) {
-  return data
-    .slice()
-    .reverse()
-    .slice(0, 20)
-    .map(o => ({
-      date: o["Order date"] || "",
-      name: o["First name"] || "",
-      phone: o["Phone"] || "",
-      city: normalizeCity(o["City"] || ""),
-      product: o["Product name"] || "",
-      variant: o["Product variant"] || "",
-      price: toNumber(o["price"]),
-      confirmation: o["Confirmation"] || "",
-      delivered: o["Delivred"] || ""
-    }));
+function draw(s){
+  clearCharts();
+
+  charts.push(new Chart(ordersChart,{
+    type:'line',
+    data:{
+      labels:(s.ordersByDay||[]).map(x=>x.date),
+      datasets:[{
+        label:'Orders',
+        data:(s.ordersByDay||[]).map(x=>x.count),
+        borderColor:'#2DD4BF',
+        backgroundColor:'rgba(45,212,191,.16)',
+        fill:true,
+        tension:.35
+      }]
+    },
+    options:opt(false)
+  }));
+
+  charts.push(new Chart(confirmationChart,{
+    type:'doughnut',
+    data:{
+      labels:(s.confirmationStatus||[]).map(x=>x.name),
+      datasets:[{
+        data:(s.confirmationStatus||[]).map(x=>x.count),
+        backgroundColor:['#2DD4BF','#FB7185','#FFD166','#60A5FA','#A78BFA'],
+        borderColor:'#03071E',
+        borderWidth:4
+      }]
+    },
+    options:opt(true)
+  }));
+
+  charts.push(new Chart(citiesChart,{
+    type:'bar',
+    data:{
+      labels:(s.topCities||[]).slice(0,7).map(x=>x.name),
+      datasets:[{
+        label:'Orders',
+        data:(s.topCities||[]).slice(0,7).map(x=>x.count),
+        backgroundColor:'rgba(96,165,250,.72)',
+        borderRadius:10
+      }]
+    },
+    options:opt(false)
+  }));
+
+  charts.push(new Chart(deliveryChart,{
+    type:'doughnut',
+    data:{
+      labels:(s.deliveryStatus||[]).map(x=>x.name),
+      datasets:[{
+        data:(s.deliveryStatus||[]).map(x=>x.count),
+        backgroundColor:['#2DD4BF','#334155','#FB7185','#FFD166','#60A5FA'],
+        borderColor:'#03071E',
+        borderWidth:4
+      }]
+    },
+    options:opt(true)
+  }));
 }
+
+loadData();
+</script>
+</body>
+</html>
