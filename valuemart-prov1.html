@@ -1,1 +1,966 @@
-<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>VALUEMART PRO V2</title><script src="https://cdn.jsdelivr.net/npm/chart.js"></script><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet"><style>:root{--bg:#03071E;--card:rgba(255,255,255,.08);--card2:rgba(255,255,255,.12);--bd:rgba(255,255,255,.14);--txt:#fff;--muted:#9ca8c7;--gold:#FFD166;--green:#2DD4BF;--red:#FB7185;--blue:#60A5FA;--shadow:0 22px 70px rgba(0,0,0,.38)}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Cairo,sans-serif;background:radial-gradient(circle at top right,rgba(45,212,191,.14),transparent 32%),radial-gradient(circle at bottom left,rgba(96,165,250,.13),transparent 28%),var(--bg);color:var(--txt);min-height:100vh}.app{display:grid;grid-template-columns:280px 1fr;min-height:100vh}.side{position:sticky;top:0;height:100vh;padding:18px;border-left:1px solid var(--bd);background:rgba(255,255,255,.045);backdrop-filter:blur(18px);overflow:auto}.brand{border:1px solid var(--bd);background:linear-gradient(135deg,var(--card2),rgba(255,255,255,.04));border-radius:24px;padding:18px;margin-bottom:16px;box-shadow:var(--shadow)}.brand h2{margin:0;font-size:22px;font-weight:900}.brand p{margin:4px 0 0;color:var(--muted);font-size:12px;font-weight:800}.nav{display:grid;gap:8px}.nav button{width:100%;border:1px solid transparent;background:transparent;color:#dfe7ff;text-align:right;padding:13px 14px;border-radius:16px;font-family:Cairo,sans-serif;font-weight:900;cursor:pointer}.nav button:hover,.nav button.active{background:rgba(255,255,255,.09);border-color:var(--bd)}.main{padding:24px;overflow:hidden}.top{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:18px}.top h1{margin:0;font-size:28px;font-weight:900}.sub{color:var(--muted);font-size:13px;font-weight:800}.actions{display:flex;gap:10px;flex-wrap:wrap}.btn,.pill{border:1px solid var(--bd);border-radius:999px;padding:11px 15px;font-family:Cairo,sans-serif;font-weight:900}.btn{cursor:pointer;border:0;background:linear-gradient(135deg,var(--gold),#ffb703);color:var(--bg)}.ghost{cursor:pointer;background:rgba(255,255,255,.08);color:#fff;border:1px solid var(--bd)}.pill{background:rgba(255,255,255,.08);color:#dfe7ff}.glass{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--bd);border-radius:22px;padding:18px;box-shadow:var(--shadow);backdrop-filter:blur(16px)}.grid{display:grid;gap:16px}.filter{grid-template-columns:repeat(6,minmax(0,1fr));align-items:end}.kpis{grid-template-columns:repeat(5,minmax(0,1fr))}.two{grid-template-columns:1.45fr 1fr}.three{grid-template-columns:repeat(3,minmax(0,1fr))}.four{grid-template-columns:repeat(4,minmax(0,1fr))}.page{display:none}.page.active{display:block}.section{margin-top:20px}.head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.head h2{margin:0;font-size:21px;font-weight:900}.kpi{min-height:138px}.kt{color:#dbe6ff;font-size:13px;font-weight:900}.val{font-size:30px;font-weight:900;margin:14px 0 6px}.note{font-size:12px;color:var(--muted);font-weight:800}label{display:block;margin-bottom:8px;color:#dbe6ff;font-size:12px;font-weight:900}input,select{width:100%;background:rgba(3,7,30,.74);border:1px solid var(--bd);color:#fff;border-radius:15px;padding:12px;font-family:Cairo,sans-serif;font-weight:900;outline:none}input[type=date]{direction:ltr}table{width:100%;border-collapse:collapse}th,td{padding:12px 8px;border-bottom:1px solid rgba(255,255,255,.08);font-size:13px;text-align:right;vertical-align:middle}th{color:var(--gold);font-weight:900}.badge{display:inline-flex;min-width:34px;justify-content:center;border-radius:999px;padding:4px 10px;background:rgba(45,212,191,.12);color:#8ff7e9;border:1px solid rgba(45,212,191,.2);font-weight:900}.bad{background:rgba(251,113,133,.12);color:#fecdd3;border-color:rgba(251,113,133,.22)}.loader,.err{padding:24px;border-radius:22px;border:1px solid var(--bd);font-weight:900;text-align:center;box-shadow:var(--shadow)}.loader{color:var(--gold)}.err{display:none;color:#fecdd3;background:rgba(251,113,133,.10)}canvas{width:100%!important;max-height:330px}.chart{min-height:390px}.wa p{background:rgba(255,255,255,.06);border:1px solid var(--bd);border-radius:14px;padding:12px;line-height:1.8;margin:8px 0}.mobile-menu{display:none}@media(max-width:1150px){.kpis{grid-template-columns:repeat(2,1fr)}.two,.three,.four,.filter{grid-template-columns:1fr 1fr}}@media(max-width:780px){.app{display:block}.side{position:relative;height:auto;border-left:0;border-bottom:1px solid var(--bd)}.nav{grid-template-columns:1fr 1fr}.nav button{font-size:12px;padding:10px}.main{padding:14px}.top{display:block}.actions{margin-top:12px}.kpis,.two,.three,.four,.filter{grid-template-columns:1fr}.glass{border-radius:18px;padding:15px}.val{font-size:26px}table{display:block;overflow-x:auto;white-space:nowrap}.head{display:block}.chart{min-height:330px}}</style></head><body><div class="app"><aside class="side"><div class="brand"><h2>VALUEMART</h2><p>لوحة القيادة PRO V2</p></div><div class="nav"><button class="active" onclick="showPage('overview',this)">📊 نظرة عامة</button><button onclick="showPage('orders',this)">🧾 الطلبات</button><button onclick="showPage('profit',this)">💰 الربح</button><button onclick="showPage('products',this)">👗 المنتجات</button><button onclick="showPage('cities',this)">📍 المدن</button><button onclick="showPage('follow',this)">📵 المتابعة</button><button onclick="showPage('insights',this)">🧠 التحليل</button><button onclick="showPage('settings',this)">⚙️ الإعدادات</button></div></aside><main class="main"><div class="top"><div><h1>📊 VALUEMART Growth Dashboard</h1><div class="sub">تصميم Glass + Cairo + خدام فالتلفون والـ PC</div></div><div class="actions"><span class="pill" id="status">⏳ كنجبد الداتا...</span><button class="btn" onclick="loadData()">تحديث 🔄</button></div></div><div id="err" class="err"></div><div id="loader" class="loader">⏳ كنجبد الطلبات من Google Sheet...</div><div id="content" style="display:none"><section class="section"><div class="glass"><div class="grid filter"><div><label>اختيار سريع</label><select id="quick" onchange="quickFilter()"><option value="all">كلشي</option><option value="today">اليوم</option><option value="yesterday">البارح</option><option value="7">آخر 7 أيام</option><option value="week">هاد السيمانة</option><option value="month">هاد الشهر</option></select></div><div><label>من</label><input type="date" id="start"></div><div><label>حتى</label><input type="date" id="end"></div><div><button class="btn" onclick="customFilter()">طبق الفلتر</button></div><div><button class="ghost btn" onclick="resetFilter()">عرض كلشي</button></div><div><span class="pill" id="flabel">كلشي</span></div></div></div></section><section id="overview" class="page active"><div class="section"><div class="head"><h2>📊 نظرة عامة</h2><span class="sub">أهم الأرقام حسب الفترة</span></div><div class="grid kpis" id="overviewKpis"></div></div><div class="section"><div class="grid two"><div class="glass chart"><h3>الطلبات حسب الأيام</h3><canvas id="ordersChart"></canvas></div><div class="glass chart"><h3>حالات التأكيد</h3><canvas id="confirmationChart"></canvas></div></div></div></section><section id="orders" class="page"><div class="section"><div class="head"><h2>🧾 الطلبات</h2><span class="sub">آخر 20 طلبة</span></div><div class="glass"><table><thead><tr><th>التاريخ</th><th>الاسم</th><th>الهاتف</th><th>المدينة</th><th>المنتج</th><th>الثمن</th><th>التأكيد</th><th>التوصيل</th></tr></thead><tbody id="ordersTable"></tbody></table></div></div></section><section id="profit" class="page"><div class="section"><div class="head"><h2>💰 مركز الربح</h2><span class="sub">الربح الحقيقي حسب كل منتج</span></div><div class="grid four"><div class="glass"><label>Ad Spend $</label><input id="adSpend" type="number" value="86.77" oninput="calcProfit()"></div><div class="glass"><label>USD/MAD</label><input id="usdMad" type="number" value="10" oninput="calcProfit()"></div><div class="glass"><label>Spend MAD manual</label><input id="manualSpend" type="number" value="0" oninput="calcProfit()"><div class="note">إلا خليتيه 0 يحسب $ × الصرف</div></div><div class="glass"><label>Default profit/order</label><input id="defaultProfit" type="number" value="70" oninput="calcProfit()"></div></div><div class="grid kpis" style="margin-top:16px" id="profitKpis"></div><div class="glass" style="margin-top:16px"><h3>Profit by Product</h3><table><thead><tr><th>المنتج</th><th>توصلات</th><th>Revenue</th><th>ربح/طلبة</th><th>المجموع</th></tr></thead><tbody id="profitTable"></tbody></table></div></div></section><section id="products" class="page"><div class="section"><div class="head"><h2>👗 المنتجات</h2><span class="sub">أقوى المنتجات</span></div><div class="grid two"><div class="glass"><h3>Top Products</h3><table><tbody id="productsTable"></tbody></table></div><div class="glass chart"><h3>Delivered by Product</h3><canvas id="productsChart"></canvas></div></div></div></section><section id="cities" class="page"><div class="section"><div class="head"><h2>📍 المدن</h2><span class="sub">فين كاين الطلب بزاف</span></div><div class="grid two"><div class="glass"><h3>Top Cities</h3><table><tbody id="citiesTable"></tbody></table></div><div class="glass chart"><h3>Cities Chart</h3><canvas id="citiesChart"></canvas></div></div></div></section><section id="follow" class="page"><div class="section"><div class="head"><h2>📵 المتابعة</h2><span class="sub">طلبات خاصها متابعة</span></div><div class="grid three" id="followCards"></div><div class="glass wa" style="margin-top:16px"><h3>Templates WhatsApp</h3><p>السلام أختي، كنأكد معاك الطلب ديالك من VALUEMART، واش باقي باغياه؟</p><p>أختي التوصيل غادي يخرج قريب، عافاك جاوبي باش نثبتو الطلب.</p><p>إلا بغيتي تبدلي اللون ولا المقاس قولي ليا دابا قبل الإرسال.</p></div></div></section><section id="insights" class="page"><div class="section"><div class="head"><h2>🧠 التحليل</h2><span class="sub">شنو خاص تدير دابا</span></div><div class="grid three" id="insightsCards"></div></div></section><section id="settings" class="page"><div class="section"><div class="head"><h2>⚙️ الإعدادات</h2></div><div class="grid two"><div class="glass"><h3>API</h3><p class="note" id="apiText"></p></div><div class="glass"><h3>ملاحظة</h3><p class="note">إلا بدلتي Apps Script خاصك دير New version Deploy. وإلا بدلتي GitHub Pages دير Ctrl+F5.</p></div></div></div></section></div></main></div><script>const API_URL='https://script.google.com/macros/s/AKfycbzFgNkVD2pQy9U9LRfJlTrpk0tNQPMSoMmWH483ZCgfKmpFy3ArsQr5EV77AvzaBrleIw/exec';let data=null,charts=[],cs='',ce='';function showPage(id,b){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active')}function dstr(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}function money(n){return'DH '+new Intl.NumberFormat('fr-MA').format(Math.round(n||0))}function pct(n){return((n||0)*100).toFixed(1)+'%'}function quickFilter(){let q=quick.value,t=new Date(),s='',e='';if(q==='today')s=e=dstr(t);if(q==='yesterday'){let y=new Date(t);y.setDate(y.getDate()-1);s=e=dstr(y)}if(q==='7'){let x=new Date(t);x.setDate(x.getDate()-6);s=dstr(x);e=dstr(t)}if(q==='week'){let x=new Date(t),day=x.getDay()||7;x.setDate(x.getDate()-day+1);s=dstr(x);e=dstr(t)}if(q==='month'){s=dstr(new Date(t.getFullYear(),t.getMonth(),1));e=dstr(t)}start.value=s;end.value=e;cs=s;ce=e;label();loadData()}function customFilter(){cs=start.value;ce=end.value;quick.value='all';label();loadData()}function resetFilter(){cs='';ce='';start.value='';end.value='';quick.value='all';label();loadData()}function label(){flabel.textContent=(!cs&&!ce)?'كلشي':(cs||'...')+' → '+(ce||'...')}function loadData(){data=null;loader.style.display='block';content.style.display='none';err.style.display='none';status.textContent='⏳ كنجبد الداتا...';let old=document.getElementById('jsonp');if(old)old.remove();let u=API_URL+'?callback=handleData&v='+Date.now();if(cs)u+='&start='+encodeURIComponent(cs);if(ce)u+='&end='+encodeURIComponent(ce);let s=document.createElement('script');s.id='jsonp';s.src=u;s.onerror=()=>showErr('API failed. خاص Apps Script New Deploy.');document.body.appendChild(s);setTimeout(()=>{if(!data)showErr('Timeout: ما وصلاتش الداتا.')},12000)}function handleData(res){if(!res||!res.success){showErr(res&&res.error?res.error:'API error');return}data=res;render(res);loader.style.display='none';content.style.display='block';status.textContent='✅ آخر تحديث: '+new Date(res.updatedAt).toLocaleString('fr-MA')}function showErr(m){loader.style.display='none';content.style.display='none';err.style.display='block';err.textContent='❌ '+m;status.textContent='API Error'}function kpi(t,v,n,c){return'<div class="glass kpi"><div class="kt">'+t+'</div><div class="val '+(c||'')+'">'+v+'</div><div class="note">'+(n||'')+'</div></div>'}function render(res){let s=res.summary||{};overviewKpis.innerHTML=kpi('مجموع الطلبات 🛒',s.totalOrders||0,'كل الطلبات')+kpi('المؤكدة ✅',s.confirmed||0,'Confirmed')+kpi('الملغية ❌',s.cancelled||0,'Cancelled')+kpi('توصلات 🚚',s.delivered||0,'Delivered')+kpi('ما جاوبوش 📵',s.noResponse||0,'Follow-up')+kpi('Revenue Confirmed',money(s.revenueConfirmed),'درهم')+kpi('Revenue Delivered',money(s.revenueDelivered),'درهم')+kpi('نسبة التأكيد',pct(s.confirmationRate),'هدفنا 70%+')+kpi('نسبة التوصيل',pct(s.deliveryRate),'Confirmed → Delivered')+kpi('AOV',money(s.aov),'متوسط الطلب');ordersTable.innerHTML=(res.orders||[]).map(o=>'<tr><td>'+safe(o.date)+'</td><td>'+safe(o.name)+'</td><td>'+safe(o.phone)+'</td><td>'+safe(o.city)+'</td><td>'+safe(o.product)+'</td><td>'+money(o.price)+'</td><td>'+safe(o.confirmation)+'</td><td>'+safe(o.delivered)+'</td></tr>').join('');citiesTable.innerHTML=(s.topCities||[]).map(x=>'<tr><td>'+safe(x.name)+'</td><td><span class="badge">'+x.count+'</span></td></tr>').join('');productsTable.innerHTML=(s.topProducts||[]).map(x=>'<tr><td>'+safe(x.name)+'</td><td><span class="badge">'+x.count+'</span></td></tr>').join('');profitTable.innerHTML=(s.productDelivered||[]).map(x=>{let kk=key(x.name),v=localStorage.getItem(kk)||defaultProfit.value;return'<tr><td>'+safe(x.name)+'</td><td><span class="badge">'+x.delivered+'</span></td><td>'+money(x.revenue)+'</td><td><input data-k="'+kk+'" data-d="'+x.delivered+'" class="pp" type="number" value="'+v+'" oninput="localStorage.setItem(this.dataset.k,this.value);calcProfit()"></td><td class="pt">0</td></tr>'}).join('');followCards.innerHTML=kpi('No Response',s.noResponse||0,'صيفط follow-up')+kpi('Cancelled',s.cancelled||0,'راجع السبب والعرض')+kpi('Delivery Problems',(s.deliveryCancelled||0)+(s.deliveryNoResponse||0),'تبع شركة التوصيل');let decision=(s.confirmationRate||0)>=.7?'التأكيد مزيان، ركز على scaling والعرض':'نسبة التأكيد ناقصة، خاص تحسين الاتصال وWhatsApp';let delivery=(s.deliveryRate||0)>=.65?'التوصيل مقبول':'خاص تتبع المدن وشركة التوصيل';let product=(s.topProducts&&s.topProducts[0])?s.topProducts[0].name:'مازال';insightsCards.innerHTML='<div class="glass"><h3>Decision</h3><p>'+decision+'</p></div><div class="glass"><h3>Delivery</h3><p>'+delivery+'</p></div><div class="glass"><h3>Best Product</h3><p>'+safe(product)+'</p></div>';apiText.textContent=API_URL;draw(s);calcProfit()}function safe(v){return String(v??'').replace(/[<>&]/g,m=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[m]))}function key(p){return'vm_'+btoa(unescape(encodeURIComponent(p||'unknown'))).replace(/=/g,'')}function calcProfit(){if(!data)return;let s=data.summary||{},sp=Number(manualSpend.value||0)||Number(adSpend.value||0)*Number(usdMad.value||0),g=0;document.querySelectorAll('.pp').forEach(i=>{let t=Number(i.value||0)*Number(i.dataset.d||0);g+=t;i.closest('tr').querySelector('.pt').textContent=money(t)});profitKpis.innerHTML=kpi('Gross Profit',money(g),'قبل ads')+kpi('Ad Spend MAD',money(sp),'ads')+kpi('Net Profit',money(g-sp),'بعد ads')+kpi('Margin',pct(s.revenueDelivered?(g-sp)/s.revenueDelivered:0),'net/revenue')+kpi('CPP الحقيقي',money(s.delivered?sp/s.delivered:0),'spend/delivered')}function clearCharts(){charts.forEach(c=>c.destroy());charts=[]}function opt(p){let o={responsive:true,maintainAspectRatio:false,plugins:{legend:{position:p?'bottom':'top',labels:{color:'#dce5ff',font:{family:'Cairo',weight:'700'}}}}};if(!p)o.scales={x:{ticks:{color:'#9ca8c7',font:{family:'Cairo'}},grid:{color:'rgba(255,255,255,.05)'}},y:{beginAtZero:true,ticks:{color:'#9ca8c7',precision:0,font:{family:'Cairo'}},grid:{color:'rgba(255,255,255,.05)'}}};return o}function draw(s){clearCharts();charts.push(new Chart(ordersChart,{type:'line',data:{labels:(s.ordersByDay||[]).map(x=>x.date),datasets:[{label:'Orders',data:(s.ordersByDay||[]).map(x=>x.count),borderColor:'#2DD4BF',backgroundColor:'rgba(45,212,191,.16)',fill:true,tension:.35}]},options:opt(false)}));charts.push(new Chart(confirmationChart,{type:'doughnut',data:{labels:(s.confirmationStatus||[]).map(x=>x.name),datasets:[{data:(s.confirmationStatus||[]).map(x=>x.count),backgroundColor:['#2DD4BF','#FB7185','#FFD166','#60A5FA','#A78BFA'],borderColor:'#03071E',borderWidth:4}]},options:opt(true)}));charts.push(new Chart(citiesChart,{type:'bar',data:{labels:(s.topCities||[]).slice(0,7).map(x=>x.name),datasets:[{label:'Orders',data:(s.topCities||[]).slice(0,7).map(x=>x.count),backgroundColor:'rgba(96,165,250,.72)',borderRadius:10}]},options:opt(false)}));charts.push(new Chart(productsChart,{type:'bar',data:{labels:(s.productDelivered||[]).slice(0,7).map(x=>x.name),datasets:[{label:'Delivered',data:(s.productDelivered||[]).slice(0,7).map(x=>x.delivered),backgroundColor:'rgba(45,212,191,.70)',borderRadius:10}]},options:opt(false)}))}loadData();</script></body></html>
+<!DOCTYPE html>
+<html lang="ar" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>ValueMart Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d0f1a;
+  --surface: #131629;
+  --surface2: #1a1e35;
+  --border: rgba(255,255,255,0.06);
+  --accent: #7c5cfc;
+  --accent2: #e84393;
+  --accent3: #00d4aa;
+  --accent4: #f5a623;
+  --text: #e8eaf6;
+  --muted: #6b7299;
+  --danger: #ff4d6d;
+  --success: #00d4aa;
+  --warn: #f5a623;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Cairo','Syne',sans-serif;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(124,92,252,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(124,92,252,0.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
+.layout{display:flex;min-height:100vh;position:relative;z-index:1;}
+
+/* SIDEBAR */
+.sidebar{width:240px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:24px 0;position:fixed;top:0;left:0;bottom:0;z-index:100;transition:transform 0.3s;}
+.logo{padding:0 24px 24px;border-bottom:1px solid var(--border);}
+.logo-text{font-size:20px;font-weight:800;letter-spacing:-0.5px;}
+.logo-text span{color:var(--accent);}
+.logo-sub{font-size:10px;color:var(--muted);font-family:'Space Mono',monospace;margin-top:2px;letter-spacing:1px;text-transform:uppercase;}
+.nav{flex:1;padding:16px 12px;display:flex;flex-direction:column;gap:2px;overflow-y:auto;}
+.nav-section-label{font-size:10px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:1.5px;text-transform:uppercase;padding:10px 12px 4px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;cursor:pointer;font-size:13.5px;font-weight:600;color:var(--muted);transition:all 0.15s;border:1px solid transparent;font-family:'Cairo',sans-serif;}
+.nav-item:hover{color:var(--text);background:var(--surface2);}
+.nav-item.active{color:var(--accent);background:rgba(124,92,252,0.12);border-color:rgba(124,92,252,0.2);}
+.nav-item svg{width:16px;height:16px;flex-shrink:0;}
+.sidebar-footer{padding:16px 24px;border-top:1px solid var(--border);}
+.api-status{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);flex-shrink:0;transition:background 0.3s;}
+.status-dot.live{background:var(--success);box-shadow:0 0 6px var(--success);}
+.status-dot.error{background:var(--danger);box-shadow:0 0 6px var(--danger);}
+#updated-at{font-size:10px;font-family:'Space Mono',monospace;color:var(--muted);margin-top:4px;}
+
+/* MAIN */
+.main{margin-left:240px;flex:1;display:flex;flex-direction:column;min-height:100vh;}
+
+/* TOPBAR */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:18px 28px;border-bottom:1px solid var(--border);background:rgba(13,15,26,0.85);backdrop-filter:blur(12px);position:sticky;top:0;z-index:50;gap:12px;flex-wrap:wrap;}
+.topbar-left h1{font-size:19px;font-weight:800;letter-spacing:-0.5px;font-family:'Cairo',sans-serif;}
+.topbar-left p{font-size:11px;color:var(--muted);margin-top:1px;font-family:'Space Mono',monospace;}
+.topbar-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.date-filter{display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 12px;font-size:12px;font-family:'Space Mono',monospace;color:var(--muted);}
+.date-filter input[type="date"]{background:transparent;border:none;color:var(--text);font-family:'Space Mono',monospace;font-size:12px;outline:none;cursor:pointer;width:108px;}
+input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(0.5);cursor:pointer;}
+.btn-refresh{display:flex;align-items:center;gap:7px;background:var(--accent);color:white;border:none;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:700;font-family:'Cairo',sans-serif;cursor:pointer;transition:all 0.15s;white-space:nowrap;}
+.btn-refresh:hover{background:#9070ff;transform:translateY(-1px);}
+.btn-refresh svg{width:14px;height:14px;flex-shrink:0;}
+.btn-refresh.loading svg{animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* PAGE SECTIONS */
+.page{display:none;padding:24px 28px;flex-direction:column;gap:20px;}
+.page.active{display:flex;}
+
+/* STAT CARDS */
+.stats-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;position:relative;overflow:hidden;transition:border-color 0.2s,transform 0.2s;}
+.stat-card:hover{transform:translateY(-2px);}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:14px 14px 0 0;}
+.stat-card.c1::before{background:var(--accent);}
+.stat-card.c2::before{background:var(--accent2);}
+.stat-card.c3::before{background:var(--accent3);}
+.stat-card.c4::before{background:var(--accent4);}
+.stat-card.c5::before{background:var(--danger);}
+.stat-icon{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;}
+.stat-icon svg{width:17px;height:17px;}
+.stat-card.c1 .stat-icon{background:rgba(124,92,252,0.15);color:var(--accent);}
+.stat-card.c2 .stat-icon{background:rgba(232,67,147,0.15);color:var(--accent2);}
+.stat-card.c3 .stat-icon{background:rgba(0,212,170,0.15);color:var(--accent3);}
+.stat-card.c4 .stat-icon{background:rgba(245,166,35,0.15);color:var(--accent4);}
+.stat-card.c5 .stat-icon{background:rgba(255,77,109,0.15);color:var(--danger);}
+.stat-val{font-size:26px;font-weight:800;letter-spacing:-1px;line-height:1;margin-bottom:4px;font-family:'Cairo',sans-serif;}
+.stat-label{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;}
+.stat-sub{font-size:11px;color:var(--muted);margin-top:6px;font-family:'Space Mono',monospace;}
+.skeleton{background:linear-gradient(90deg,var(--surface2) 25%,rgba(255,255,255,0.04) 50%,var(--surface2) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:6px;}
+@keyframes shimmer{to{background-position:-200% 0;}}
+
+/* PANELS */
+.panels-row{display:grid;grid-template-columns:1.6fr 1fr;gap:16px;}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;}
+.panel-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);}
+.panel-title{font-size:14px;font-weight:700;font-family:'Cairo',sans-serif;}
+.panel-badge{font-size:10px;font-family:'Space Mono',monospace;color:var(--muted);background:var(--surface2);padding:3px 8px;border-radius:20px;border:1px solid var(--border);}
+.chart-wrap{padding:16px 20px;height:210px;position:relative;}
+canvas{display:block;}
+.donut-panel{display:flex;flex-direction:column;align-items:center;padding:18px;gap:14px;}
+.donut-wrap{position:relative;width:130px;height:130px;}
+.donut-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;}
+.donut-center .val{font-size:24px;font-weight:800;letter-spacing:-1px;font-family:'Cairo',sans-serif;}
+.donut-center .lbl{font-size:10px;color:var(--muted);font-family:'Space Mono',monospace;text-transform:uppercase;}
+.legend{width:100%;display:flex;flex-direction:column;gap:7px;}
+.legend-item{display:flex;align-items:center;justify-content:space-between;font-size:12px;}
+.legend-left{display:flex;align-items:center;gap:8px;color:var(--muted);font-weight:600;}
+.legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.legend-val{font-family:'Space Mono',monospace;font-size:11px;color:var(--text);}
+
+/* BOTTOM ROW */
+.bottom-row{display:grid;grid-template-columns:1fr 1fr 1.5fr;gap:16px;}
+.top-list{display:flex;flex-direction:column;}
+.top-list-item{display:flex;align-items:center;gap:12px;padding:11px 20px;border-bottom:1px solid var(--border);transition:background 0.15s;}
+.top-list-item:last-child{border-bottom:none;}
+.top-list-item:hover{background:var(--surface2);}
+.rank{font-size:11px;font-family:'Space Mono',monospace;color:var(--muted);width:20px;flex-shrink:0;}
+.item-info{flex:1;min-width:0;}
+.item-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'Cairo',sans-serif;}
+.item-bar-wrap{height:3px;background:var(--surface2);border-radius:2px;margin-top:5px;overflow:hidden;}
+.item-bar{height:100%;border-radius:2px;background:var(--accent);transition:width 0.8s cubic-bezier(0.23,1,0.32,1);}
+.item-count{font-size:12px;font-family:'Space Mono',monospace;color:var(--text);flex-shrink:0;}
+
+/* TABLE */
+.table-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:12.5px;}
+thead th{padding:10px 14px;text-align:right;font-size:10px;color:var(--muted);font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:0.8px;border-bottom:1px solid var(--border);white-space:nowrap;}
+tbody tr{border-bottom:1px solid var(--border);transition:background 0.12s;}
+tbody tr:hover{background:var(--surface2);}
+tbody tr:last-child{border-bottom:none;}
+tbody td{padding:10px 14px;color:var(--text);vertical-align:middle;text-align:right;}
+.badge{display:inline-flex;align-items:center;font-size:10px;font-weight:700;font-family:'Space Mono',monospace;padding:2px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:0.3px;white-space:nowrap;}
+.badge-confirmed{background:rgba(0,212,170,0.12);color:var(--success);border:1px solid rgba(0,212,170,0.2);}
+.badge-delivered{background:rgba(124,92,252,0.12);color:var(--accent);border:1px solid rgba(124,92,252,0.2);}
+.badge-cancelled{background:rgba(255,77,109,0.12);color:var(--danger);border:1px solid rgba(255,77,109,0.2);}
+.badge-pending{background:rgba(245,166,35,0.12);color:var(--warn);border:1px solid rgba(245,166,35,0.2);}
+.badge-noreply{background:rgba(107,114,153,0.12);color:var(--muted);border:1px solid rgba(107,114,153,0.2);}
+
+/* SEARCH / FILTER BAR */
+.filter-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+.search-input{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 14px;color:var(--text);font-family:'Cairo',sans-serif;font-size:13px;outline:none;flex:1;min-width:200px;transition:border-color 0.2s;}
+.search-input:focus{border-color:var(--accent);}
+.search-input::placeholder{color:var(--muted);}
+select.filter-sel{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-family:'Cairo',sans-serif;font-size:13px;outline:none;cursor:pointer;}
+select.filter-sel option{background:var(--surface);}
+
+/* PAGINATION */
+.pagination{display:flex;align-items:center;gap:8px;justify-content:center;padding:16px;}
+.page-btn{background:var(--surface2);border:1px solid var(--border);color:var(--muted);border-radius:6px;padding:5px 12px;cursor:pointer;font-size:12px;font-family:'Space Mono',monospace;transition:all 0.15s;}
+.page-btn:hover{color:var(--text);border-color:var(--accent);}
+.page-btn.active{background:var(--accent);color:white;border-color:var(--accent);}
+.page-info{font-size:11px;font-family:'Space Mono',monospace;color:var(--muted);}
+
+/* DELIVERY PAGE CARDS */
+.del-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.progress-bar-wrap{margin-top:8px;}
+.progress-bar-bg{height:6px;background:var(--surface2);border-radius:3px;overflow:hidden;}
+.progress-bar-fill{height:100%;border-radius:3px;transition:width 1s cubic-bezier(0.23,1,0.32,1);}
+
+/* HISTORY PAGE */
+.history-tabs{display:flex;gap:8px;flex-wrap:wrap;}
+.htab{padding:7px 16px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;color:var(--muted);border:1px solid var(--border);transition:all 0.15s;font-family:'Cairo',sans-serif;}
+.htab:hover{color:var(--text);background:var(--surface2);}
+.htab.active{color:var(--accent);background:rgba(124,92,252,0.12);border-color:rgba(124,92,252,0.2);}
+
+/* PRODUCTS PAGE */
+.prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.prod-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px;transition:transform 0.2s,border-color 0.2s;}
+.prod-card:hover{transform:translateY(-2px);border-color:rgba(124,92,252,0.3);}
+.prod-name{font-size:13px;font-weight:700;margin-bottom:12px;color:var(--text);font-family:'Cairo',sans-serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.prod-stat{display:flex;justify-content:space-between;margin-bottom:6px;font-size:12px;}
+.prod-stat-label{color:var(--muted);}
+.prod-stat-val{font-family:'Space Mono',monospace;color:var(--text);}
+
+/* TOAST */
+#toast{position:fixed;bottom:24px;right:24px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:11px 16px;font-size:13px;font-family:'Space Mono',monospace;color:var(--text);transform:translateY(60px);opacity:0;transition:all 0.3s;z-index:999;}
+#toast.show{transform:translateY(0);opacity:1;}
+
+/* FADE IN */
+.fade-in{animation:fadeIn 0.35s ease forwards;opacity:0;}
+@keyframes fadeIn{to{opacity:1;}}
+
+/* EMPTY STATE */
+.empty{padding:40px;text-align:center;color:var(--muted);font-size:13px;}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--surface2);border-radius:3px;}
+
+/* RESPONSIVE */
+@media(max-width:1100px){
+  .stats-grid{grid-template-columns:repeat(3,1fr);}
+  .bottom-row{grid-template-columns:1fr 1fr;}
+  .prod-grid{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:850px){
+  .sidebar{width:200px;}
+  .main{margin-left:200px;}
+  .panels-row{grid-template-columns:1fr;}
+  .del-stats{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:680px){
+  .sidebar{position:fixed;transform:translateX(-100%);width:240px;}
+  .sidebar.open{transform:translateX(0);}
+  .main{margin-left:0;}
+  .hamburger{display:flex!important;}
+  .stats-grid{grid-template-columns:repeat(2,1fr);gap:10px;}
+  .panels-row,.bottom-row{grid-template-columns:1fr;}
+  .prod-grid{grid-template-columns:1fr;}
+  .del-stats{grid-template-columns:repeat(2,1fr);}
+  .page{padding:16px;}
+  .topbar{padding:14px 16px;}
+  .overlay{display:block!important;}
+}
+.hamburger{display:none;align-items:center;justify-content:center;width:36px;height:36px;background:var(--surface);border:1px solid var(--border);border-radius:8px;cursor:pointer;color:var(--text);}
+.hamburger svg{width:18px;height:18px;}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99;}
+.overlay.active{display:block;}
+</style>
+</head>
+<body>
+
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<div class="layout">
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="logo">
+    <div class="logo-text">Value<span>Mart</span></div>
+    <div class="logo-sub">Orders Analytics</div>
+  </div>
+  <nav class="nav">
+    <div class="nav-section-label">عام</div>
+    <div class="nav-item active" onclick="navigate('overview')">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      نظرة عامة
+    </div>
+    <div class="nav-item" onclick="navigate('orders')">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+      الطلبات
+    </div>
+    <div class="nav-item" onclick="navigate('products')">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+      المنتجات
+    </div>
+    <div class="nav-section-label">تقارير</div>
+    <div class="nav-item" onclick="navigate('delivery')">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+      التوصيلات
+    </div>
+    <div class="nav-item" onclick="navigate('history')">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      السجل
+    </div>
+    <div class="nav-section-label">المدن</div>
+    <div class="nav-item" onclick="navigate('cities')">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      أفضل المدن
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="api-status">
+      <div class="status-dot" id="status-dot"></div>
+      <span id="status-text">جاري الاتصال...</span>
+    </div>
+    <div id="updated-at">—</div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div class="hamburger" onclick="toggleSidebar()">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </div>
+      <div class="topbar-left">
+        <h1 id="page-title">لوحة التحكم</h1>
+        <p id="filter-label">جميع الطلبات — Youcan Orders</p>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="date-filter">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        <input type="date" id="start-date">
+        <span style="color:var(--muted)">←</span>
+        <input type="date" id="end-date">
+      </div>
+      <button class="btn-refresh" onclick="loadData()" id="refresh-btn">
+        <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+        تحديث
+      </button>
+    </div>
+  </header>
+
+  <!-- ========= PAGE: OVERVIEW ========= -->
+  <section class="page active" id="page-overview">
+    <div class="stats-grid" id="stats-grid">
+      <div class="stat-card c1"><div class="stat-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><path d="M3 6h18"/></svg></div><div class="stat-val skeleton" id="s-total" style="width:80px;height:28px"></div><div class="stat-label">إجمالي الطلبات</div><div class="stat-sub" id="s-filtered">— مفلترة</div></div>
+      <div class="stat-card c2"><div class="stat-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div><div class="stat-val skeleton" id="s-confirmed" style="width:80px;height:28px"></div><div class="stat-label">مؤكدة</div><div class="stat-sub" id="s-conf-rate">— نسبة التأكيد</div></div>
+      <div class="stat-card c3"><div class="stat-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="stat-val skeleton" id="s-delivered" style="width:80px;height:28px"></div><div class="stat-label">مُسلَّمة</div><div class="stat-sub" id="s-del-rate">— نسبة التوصيل</div></div>
+      <div class="stat-card c4"><div class="stat-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div><div class="stat-val skeleton" id="s-revenue" style="width:80px;height:28px"></div><div class="stat-label">رقم الأعمال (درهم)</div><div class="stat-sub" id="s-aov">— متوسط الطلب</div></div>
+      <div class="stat-card c5"><div class="stat-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><div class="stat-val skeleton" id="s-cancelled" style="width:80px;height:28px"></div><div class="stat-label">ملغية</div><div class="stat-sub" id="s-noreply">— بدون رد</div></div>
+    </div>
+    <div class="panels-row">
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title">الطلبات يومياً</div><div class="panel-badge" id="chart-range">—</div></div>
+        <div class="chart-wrap"><canvas id="lineChart"></canvas></div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title">حالة التأكيد</div><div class="panel-badge" id="conf-total-badge">—</div></div>
+        <div class="donut-panel">
+          <div class="donut-wrap"><canvas id="donutConf" width="130" height="130"></canvas><div class="donut-center"><div class="val" id="donut-conf-val">—</div><div class="lbl">نسبة التأكيد</div></div></div>
+          <div class="legend" id="conf-legend"></div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-row">
+      <div class="panel"><div class="panel-header"><div class="panel-title">🏙 أفضل المدن</div><div class="panel-badge">أفضل 5</div></div><div class="top-list" id="ov-cities"></div></div>
+      <div class="panel"><div class="panel-header"><div class="panel-title">📦 أفضل المنتجات</div><div class="panel-badge">أفضل 5</div></div><div class="top-list" id="ov-products"></div></div>
+      <div class="panel"><div class="panel-header"><div class="panel-title">أحدث الطلبات</div><div class="panel-badge" id="orders-count-badge">—</div></div><div class="table-wrap"><table><thead><tr><th>التاريخ</th><th>العميل</th><th>المدينة</th><th>السعر</th><th>التأكيد</th><th>التوصيل</th></tr></thead><tbody id="ov-orders-tbody"></tbody></table></div></div>
+    </div>
+  </section>
+
+  <!-- ========= PAGE: ORDERS ========= -->
+  <section class="page" id="page-orders">
+    <div class="filter-bar">
+      <input class="search-input" type="text" id="orders-search" placeholder="🔍 ابحث باسم العميل أو المدينة أو المنتج..." oninput="renderOrdersPage()">
+      <select class="filter-sel" id="orders-conf-filter" onchange="renderOrdersPage()">
+        <option value="">كل التأكيدات</option>
+        <option value="confirmer">مؤكد</option>
+        <option value="annuler">ملغي</option>
+        <option value="reminder">تذكير</option>
+      </select>
+      <select class="filter-sel" id="orders-del-filter" onchange="renderOrdersPage()">
+        <option value="">كل التوصيلات</option>
+        <option value="livree">مُسلَّم</option>
+        <option value="annuler">ملغي</option>
+        <option value="reponse">بدون رد</option>
+        <option value="reporte">مرجأ</option>
+      </select>
+      <div class="panel-badge" id="orders-count-info">—</div>
+    </div>
+    <div class="panel">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>التاريخ</th><th>العميل</th><th>الهاتف</th><th>المدينة</th><th>المنتج</th><th>المقاس/اللون</th><th>السعر</th><th>التأكيد</th><th>التوصيل</th></tr></thead>
+          <tbody id="orders-tbody"></tbody>
+        </table>
+      </div>
+      <div class="pagination" id="orders-pagination"></div>
+    </div>
+  </section>
+
+  <!-- ========= PAGE: PRODUCTS ========= -->
+  <section class="page" id="page-products">
+    <div class="panels-row" style="grid-template-columns:1fr 1fr;">
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title">📊 إحصائيات المنتجات</div></div>
+        <div class="top-list" id="prod-top-list"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title">📈 المنتجات المُسلَّمة</div></div>
+        <div class="top-list" id="prod-delivered-list"></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><div class="panel-title">تفاصيل المنتجات</div><div class="panel-badge" id="prod-count">—</div></div>
+      <div class="prod-grid" id="prod-grid" style="padding:16px;"></div>
+    </div>
+    <div class="bottom-row" style="grid-template-columns:1fr 1fr;">
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title">أفضل المقاسات</div></div>
+        <div class="top-list" id="variants-list"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title">حالة التوصيل حسب المنتج</div></div>
+        <div style="padding:16px;" id="prod-delivery-bars"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========= PAGE: DELIVERY ========= -->
+  <section class="page" id="page-delivery">
+    <div class="del-stats" id="del-stats-cards"></div>
+    <div class="panels-row">
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title">حالة التوصيل</div><div class="panel-badge" id="del-total-badge">—</div></div>
+        <div class="donut-panel">
+          <div class="donut-wrap"><canvas id="donutDel" width="130" height="130"></canvas><div class="donut-center"><div class="val" id="donut-del-val">—</div><div class="lbl">نسبة التوصيل</div></div></div>
+          <div class="legend" id="del-legend"></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title">أفضل المدن — التوصيل</div></div>
+        <div class="top-list" id="del-cities-list"></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><div class="panel-title">تفاصيل التوصيل حسب المنتج</div></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>المنتج</th><th>المُسلَّمة</th><th>رقم الأعمال</th><th>متوسط السعر</th><th>نسبة التوصيل</th></tr></thead>
+          <tbody id="del-prod-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========= PAGE: HISTORY ========= -->
+  <section class="page" id="page-history">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;">
+      <div class="history-tabs" id="history-tabs">
+        <div class="htab active" onclick="switchHistoryTab(this,'youcan')">Youcan Orders</div>
+        <div class="htab" onclick="switchHistoryTab(this,'nov')">نوفمبر 2025</div>
+        <div class="htab" onclick="switchHistoryTab(this,'dec')">ديسمبر 2025</div>
+        <div class="htab" onclick="switchHistoryTab(this,'jan')">يناير 2026</div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title" id="hist-tab-title">Youcan Orders</div>
+        <div class="panel-badge" id="hist-badge">—</div>
+      </div>
+      <div class="filter-bar" style="padding:16px 20px 0;">
+        <input class="search-input" type="text" id="hist-search" placeholder="🔍 ابحث..." oninput="renderHistoryTable()">
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead id="hist-thead"></thead>
+          <tbody id="hist-tbody"></tbody>
+        </table>
+      </div>
+      <div class="pagination" id="hist-pagination"></div>
+    </div>
+  </section>
+
+  <!-- ========= PAGE: CITIES ========= -->
+  <section class="page" id="page-cities">
+    <div class="panels-row" style="grid-template-columns:1fr 1fr;">
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title">📍 الطلبات حسب المدينة</div><div class="panel-badge">أفضل 10</div></div>
+        <div class="chart-wrap" style="height:260px;"><canvas id="barChart"></canvas></div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title">نسبة التوزيع الجغرافي</div></div>
+        <div class="donut-panel">
+          <div class="donut-wrap" style="width:150px;height:150px;"><canvas id="donutCity" width="150" height="150"></canvas><div class="donut-center"><div class="val" id="donut-city-val">—</div><div class="lbl">مدينة</div></div></div>
+          <div class="legend" id="city-legend"></div>
+        </div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><div class="panel-title">تفاصيل المدن</div></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>المدينة</th><th>الطلبات</th><th>نسبة الإجمالي</th><th>توزيع</th></tr></thead>
+          <tbody id="cities-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /main -->
+</div><!-- /layout -->
+
+<div id="toast"></div>
+
+<script>
+const API_URL = 'https://script.google.com/macros/s/AKfycbzFgNkVD2pQy9U9LRfJlTrpk0tNQPMSoMmWH483ZCgfKmpFy3ArsQr5EV77AvzaBrleIw/exec';
+
+let G = null; // global data
+let ordersPage = 1;
+const ORDERS_PER_PAGE = 20;
+let histPage = 1;
+const HIST_PER_PAGE = 25;
+let currentHistTab = 'youcan';
+
+// ─── NAVIGATION ───
+const pageTitles = {
+  overview: 'لوحة التحكم',
+  orders: 'الطلبات',
+  products: 'المنتجات',
+  delivery: 'التوصيلات',
+  history: 'السجل',
+  cities: 'أفضل المدن'
+};
+
+function navigate(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => {
+    if (n.getAttribute('onclick') && n.getAttribute('onclick').includes("'" + page + "'")) n.classList.add('active');
+  });
+  document.getElementById('page-title').textContent = pageTitles[page] || page;
+  closeSidebar();
+  if (G) renderPage(page);
+}
+
+function renderPage(page) {
+  const s = G.summary;
+  if (page === 'delivery') renderDeliveryPage(s);
+  if (page === 'products') renderProductsPage(s);
+  if (page === 'cities') renderCitiesPage(s);
+  if (page === 'history') renderHistoryTable();
+  if (page === 'orders') { ordersPage = 1; renderOrdersPage(); }
+}
+
+// ─── SIDEBAR MOBILE ───
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('active');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('active');
+}
+
+// ─── API ───
+async function loadData() {
+  const btn = document.getElementById('refresh-btn');
+  btn.classList.add('loading');
+  setStatus('loading');
+  const s = document.getElementById('start-date').value;
+  const e = document.getElementById('end-date').value;
+  let url = API_URL;
+  const p = [];
+  if (s) p.push('start=' + s);
+  if (e) p.push('end=' + e);
+  if (p.length) url += '?' + p.join('&');
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    if (!data.success) throw new Error(data.error || 'خطأ في API');
+    G = data;
+    renderAllPages(data);
+    setStatus('live');
+    showToast('✓ تم تحديث البيانات');
+    const d = new Date(data.updatedAt);
+    document.getElementById('updated-at').textContent = d.toLocaleTimeString('fr-FR');
+    const f = data.filters;
+    document.getElementById('filter-label').textContent = (f.start || f.end)
+      ? 'فلتر: ' + (f.start||'...') + ' ← ' + (f.end||'...')
+      : 'جميع الطلبات — Youcan Orders';
+  } catch(err) {
+    setStatus('error');
+    showToast('✗ خطأ: ' + err.message, 5000);
+  } finally {
+    btn.classList.remove('loading');
+  }
+}
+
+function setStatus(s) {
+  const dot = document.getElementById('status-dot');
+  const txt = document.getElementById('status-text');
+  dot.className = 'status-dot' + (s==='live'?' live':s==='error'?' error':'');
+  txt.textContent = s==='live'?'متصل':s==='error'?'خطأ':'جاري الاتصال...';
+}
+
+function renderAllPages(data) {
+  renderOverview(data);
+  // Render current active page if not overview
+  const active = document.querySelector('.page.active');
+  if (active && active.id !== 'page-overview') {
+    const pg = active.id.replace('page-', '');
+    renderPage(pg);
+  }
+}
+
+// ─── HELPERS ───
+function fmtN(n) { return n == null ? '—' : Number(n).toLocaleString('fr-FR'); }
+function pct(v) { return (v*100).toFixed(1) + '%'; }
+function fmtDate(str) {
+  if (!str) return '—';
+  const d = new Date(str);
+  if (isNaN(d)) return String(str).slice(0,10);
+  return d.toLocaleDateString('ar-MA',{day:'2-digit',month:'2-digit',year:'2-digit'});
+}
+function cleanProd(n) { return String(n||'').replace(/[🌸]/g,'').trim(); }
+function getBadgeClass(val) {
+  if (!val) return '';
+  const v = String(val).toLowerCase();
+  if (v.includes('confirmer')) return 'badge-confirmed';
+  if (v.includes('annuler')) return 'badge-cancelled';
+  if (v.includes('livree')||v.includes('livrée')) return 'badge-delivered';
+  if (v.includes('reporte')||v.includes('reporté')) return 'badge-pending';
+  if (v.includes('reponse')||v.includes('réponse')||v.includes('reminder')||v.includes('appel')) return 'badge-noreply';
+  return 'badge-noreply';
+}
+function setText(id, val) { const el=document.getElementById(id); if(el) el.textContent=val; }
+function removeSkeleton(...ids) {
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.classList.remove('skeleton'); el.style.width=''; el.style.height=''; }
+  });
+}
+
+// ─── OVERVIEW ───
+function renderOverview(data) {
+  const s = data.summary;
+  setText('s-total', fmtN(data.totalRows));
+  setText('s-filtered', fmtN(data.filteredRows) + ' مفلترة');
+  setText('s-confirmed', fmtN(s.confirmed));
+  setText('s-conf-rate', pct(s.confirmationRate) + ' نسبة التأكيد');
+  setText('s-delivered', fmtN(s.delivered));
+  setText('s-del-rate', pct(s.deliveryRate) + ' نسبة التوصيل');
+  setText('s-revenue', fmtN(Math.round(s.revenueDelivered)));
+  setText('s-aov', 'متوسط ' + fmtN(Math.round(s.realAovDelivered)) + ' درهم');
+  setText('s-cancelled', fmtN(s.cancelled));
+  setText('s-noreply', fmtN(s.noResponse) + ' بدون رد');
+  removeSkeleton('s-total','s-confirmed','s-delivered','s-revenue','s-cancelled');
+  renderLineChart(s.ordersByDay);
+  renderDonut('donutConf', 'donut-conf-val', 'conf-total-badge', 'conf-legend', s.confirmationStatus, s.confirmationRate, 'conf');
+  renderTopList('ov-cities', s.topCities, '#7c5cfc');
+  renderTopList('ov-products', (s.topProducts||[]).map(p=>({...p,name:cleanProd(p.name).slice(0,28)})), '#e84393');
+  renderMiniOrdersTable(data.orders);
+  setText('orders-count-badge', (data.orders||[]).length + ' حديثة');
+}
+
+function renderMiniOrdersTable(orders) {
+  const tb = document.getElementById('ov-orders-tbody');
+  tb.innerHTML = '';
+  if (!orders?.length) { tb.innerHTML='<tr><td colspan="6" class="empty">لا توجد طلبات</td></tr>'; return; }
+  orders.slice(0,12).forEach((o,i) => {
+    const tr = document.createElement('tr');
+    tr.className = 'fade-in';
+    tr.style.animationDelay = (i*0.025)+'s';
+    tr.innerHTML = `<td style="font-family:'Space Mono',monospace;font-size:10px;color:var(--muted)">${fmtDate(o.date)}</td><td style="font-weight:600">${o.name||'—'}</td><td style="color:var(--muted)">${o.city||'—'}</td><td style="font-family:'Space Mono',monospace;font-size:11px;color:var(--accent4)">${o.price?fmtN(o.price)+' ﺩﻫ':'—'}</td><td><span class="badge ${getBadgeClass(o.confirmation)}">${o.confirmation||'—'}</span></td><td><span class="badge ${getBadgeClass(o.delivered)}">${o.delivered||'—'}</span></td>`;
+    tb.appendChild(tr);
+  });
+}
+
+// ─── LINE CHART ───
+function renderLineChart(ordersByDay) {
+  const canvas = document.getElementById('lineChart');
+  const wrap = canvas.parentElement;
+  canvas.width = wrap.offsetWidth - 2;
+  canvas.height = wrap.offsetHeight - 4;
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  if (!ordersByDay?.length) { ctx.fillStyle='#6b7299'; ctx.font='13px Cairo'; ctx.textAlign='center'; ctx.fillText('لا توجد بيانات',canvas.width/2,canvas.height/2); return; }
+  const W=canvas.width, H=canvas.height;
+  const pad={top:14,right:16,bottom:36,left:40};
+  const cW=W-pad.left-pad.right, cH=H-pad.top-pad.bottom;
+  const maxVal=Math.max(...ordersByDay.map(d=>d.count));
+  const step=Math.max(1,Math.floor(ordersByDay.length/7));
+  for(let i=0;i<=4;i++) {
+    const y=pad.top+cH-(i/4)*cH;
+    ctx.beginPath(); ctx.strokeStyle='rgba(255,255,255,0.04)'; ctx.lineWidth=1;
+    ctx.moveTo(pad.left,y); ctx.lineTo(pad.left+cW,y); ctx.stroke();
+    ctx.fillStyle='#6b7299'; ctx.font='9px Space Mono,monospace'; ctx.textAlign='right';
+    ctx.fillText(Math.round((i/4)*maxVal),pad.left-5,y+4);
+  }
+  const pts=ordersByDay.map((d,i)=>({x:pad.left+(i/(ordersByDay.length-1||1))*cW,y:pad.top+cH-((d.count/(maxVal||1))*cH)}));
+  const g=ctx.createLinearGradient(0,pad.top,0,pad.top+cH);
+  g.addColorStop(0,'rgba(124,92,252,0.28)'); g.addColorStop(1,'rgba(124,92,252,0)');
+  ctx.beginPath(); ctx.moveTo(pts[0].x,pts[0].y);
+  for(let i=1;i<pts.length;i++){const cx=(pts[i-1].x+pts[i].x)/2;ctx.bezierCurveTo(cx,pts[i-1].y,cx,pts[i].y,pts[i].x,pts[i].y);}
+  ctx.lineTo(pts[pts.length-1].x,pad.top+cH); ctx.lineTo(pts[0].x,pad.top+cH);
+  ctx.closePath(); ctx.fillStyle=g; ctx.fill();
+  ctx.beginPath(); ctx.moveTo(pts[0].x,pts[0].y);
+  for(let i=1;i<pts.length;i++){const cx=(pts[i-1].x+pts[i].x)/2;ctx.bezierCurveTo(cx,pts[i-1].y,cx,pts[i].y,pts[i].x,pts[i].y);}
+  ctx.strokeStyle='#7c5cfc'; ctx.lineWidth=2.5; ctx.stroke();
+  pts.forEach((p,i)=>{
+    ctx.beginPath(); ctx.arc(p.x,p.y,2.5,0,Math.PI*2); ctx.fillStyle='#7c5cfc'; ctx.fill();
+    if(i%step===0||i===pts.length-1){ctx.fillStyle='#6b7299';ctx.font='9px Space Mono,monospace';ctx.textAlign='center';ctx.fillText(ordersByDay[i].date.slice(5),p.x,pad.top+cH+13);}
+  });
+  if(ordersByDay.length>0) setText('chart-range', ordersByDay[0].date.slice(5)+' ← '+ordersByDay[ordersByDay.length-1].date.slice(5));
+}
+
+// ─── DONUT ───
+function renderDonut(canvasId, valId, badgeId, legendId, statusArr, rate, type) {
+  if (!statusArr?.length) return;
+  const catsDef = {
+    conf: [{k:'confirmer',l:'مؤكد',c:'#00d4aa'},{k:'annuler',l:'ملغي',c:'#ff4d6d'},{k:'reponse',l:'بدون رد',c:'#6b7299'},{k:'other',l:'أخرى',c:'#f5a623'}],
+    del:  [{k:'livree',l:'مُسلَّم',c:'#7c5cfc'},{k:'annuler',l:'ملغي',c:'#ff4d6d'},{k:'reponse',l:'بدون رد',c:'#6b7299'},{k:'reporte',l:'مرجأ',c:'#f5a623'}]
+  };
+  const cats = catsDef[type] || catsDef.conf;
+  const vals = Array(cats.length).fill(0);
+  statusArr.forEach(s => {
+    const v = s.name.toLowerCase();
+    cats.forEach((c,i)=>{if(v.includes(c.k)) vals[i]+=s.count;});
+  });
+  const total = vals.reduce((a,b)=>a+b,0);
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const cx=W/2, cy=H/2, r=Math.min(W,H)/2-4, ir=r*0.55;
+  ctx.clearRect(0,0,W,H);
+  let angle=-Math.PI/2;
+  vals.forEach((v,i)=>{
+    if(!v) return;
+    const slice=(v/total)*2*Math.PI;
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,angle,angle+slice);
+    ctx.fillStyle=cats[i].c; ctx.fill(); angle+=slice;
+  });
+  ctx.beginPath(); ctx.arc(cx,cy,ir,0,2*Math.PI);
+  ctx.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--surface').trim()||'#131629';
+  ctx.fill();
+  if(valId) setText(valId, pct(rate));
+  if(badgeId) setText(badgeId, fmtN(total));
+  if(legendId) {
+    const el=document.getElementById(legendId); el.innerHTML='';
+    vals.forEach((v,i)=>{
+      if(!v) return;
+      const p=total?((v/total)*100).toFixed(1):'0';
+      el.innerHTML+=`<div class="legend-item"><div class="legend-left"><div class="legend-dot" style="background:${cats[i].c}"></div>${cats[i].l}</div><div class="legend-val">${fmtN(v)} (${p}%)</div></div>`;
+    });
+  }
+}
+
+// ─── TOP LIST ───
+function renderTopList(id, items, color) {
+  const el=document.getElementById(id); el.innerHTML='';
+  if(!items?.length){el.innerHTML='<div class="empty">لا توجد بيانات</div>';return;}
+  const top=items.slice(0,5), max=top[0].count;
+  top.forEach((item,i)=>{
+    const div=document.createElement('div');
+    div.className='top-list-item fade-in'; div.style.animationDelay=(i*0.06)+'s';
+    div.innerHTML=`<div class="rank">${String(i+1).padStart(2,'0')}</div><div class="item-info"><div class="item-name">${item.name}</div><div class="item-bar-wrap"><div class="item-bar" style="width:0;background:${color}" data-w="${Math.round((item.count/max)*100)}"></div></div></div><div class="item-count">${fmtN(item.count)}</div>`;
+    el.appendChild(div);
+    setTimeout(()=>{const b=div.querySelector('.item-bar');if(b)b.style.width=b.dataset.w+'%';},80+i*60);
+  });
+}
+
+// ─── ORDERS PAGE ───
+function getFilteredOrders() {
+  if (!G) return [];
+  const q=(document.getElementById('orders-search')?.value||'').toLowerCase().trim();
+  const cf=(document.getElementById('orders-conf-filter')?.value||'').toLowerCase();
+  const df=(document.getElementById('orders-del-filter')?.value||'').toLowerCase();
+  return (G.orders||[]).filter(o=>{
+    if(q && !([o.name,o.city,o.product,o.phone,o.variant].join(' ').toLowerCase().includes(q))) return false;
+    if(cf && !String(o.confirmation||'').toLowerCase().includes(cf)) return false;
+    if(df && !String(o.delivered||'').toLowerCase().includes(df)) return false;
+    return true;
+  });
+}
+
+function renderOrdersPage() {
+  const filtered = getFilteredOrders();
+  const total = filtered.length;
+  const totalPages = Math.ceil(total/ORDERS_PER_PAGE) || 1;
+  if(ordersPage > totalPages) ordersPage = totalPages;
+  const slice = filtered.slice((ordersPage-1)*ORDERS_PER_PAGE, ordersPage*ORDERS_PER_PAGE);
+  setText('orders-count-info', `${fmtN(total)} طلب`);
+  const tb=document.getElementById('orders-tbody'); tb.innerHTML='';
+  if(!slice.length){tb.innerHTML='<tr><td colspan="10" class="empty">لا توجد طلبات</td></tr>';}
+  slice.forEach((o,i)=>{
+    const tr=document.createElement('tr');
+    tr.className='fade-in'; tr.style.animationDelay=(i*0.015)+'s';
+    tr.innerHTML=`<td style="color:var(--muted);font-size:11px">${(ordersPage-1)*ORDERS_PER_PAGE+i+1}</td><td style="font-family:'Space Mono',monospace;font-size:10px;color:var(--muted)">${fmtDate(o.date)}</td><td style="font-weight:600">${o.name||'—'}</td><td style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted)">${o.phone||'—'}</td><td style="color:var(--muted)">${o.city||'—'}</td><td style="color:var(--muted);max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${cleanProd(o.product).slice(0,28)}</td><td style="color:var(--muted);font-size:11px">${o.variant||'—'}</td><td style="font-family:'Space Mono',monospace;font-size:11px;color:var(--accent4)">${o.price?fmtN(o.price)+' ﺩﻫ':'—'}</td><td><span class="badge ${getBadgeClass(o.confirmation)}">${o.confirmation||'—'}</span></td><td><span class="badge ${getBadgeClass(o.delivered)}">${o.delivered||'—'}</span></td>`;
+    tb.appendChild(tr);
+  });
+  renderPagination('orders-pagination', ordersPage, totalPages, pg=>{ordersPage=pg;renderOrdersPage();});
+}
+
+// ─── PRODUCTS PAGE ───
+function renderProductsPage(s) {
+  const prods = (s.topProducts||[]).map(p=>({...p,name:cleanProd(p.name).slice(0,35)}));
+  renderTopList('prod-top-list', prods, '#7c5cfc');
+  const delProds = (s.productDelivered||[]).map(p=>({...p,name:cleanProd(p.name).slice(0,35)}));
+  renderTopList('prod-delivered-list', delProds.map(p=>({name:p.name,count:p.delivered})), '#00d4aa');
+  setText('prod-count', fmtN(delProds.length) + ' منتج');
+  const grid=document.getElementById('prod-grid'); grid.innerHTML='';
+  delProds.slice(0,9).forEach((p,i)=>{
+    const card=document.createElement('div');
+    card.className='prod-card fade-in'; card.style.animationDelay=(i*0.05)+'s';
+    const avg = p.delivered ? Math.round(p.revenue/p.delivered) : 0;
+    card.innerHTML=`<div class="prod-name">${p.name}</div><div class="prod-stat"><span class="prod-stat-label">مُسلَّمة</span><span class="prod-stat-val">${fmtN(p.delivered)}</span></div><div class="prod-stat"><span class="prod-stat-label">رقم الأعمال</span><span class="prod-stat-val">${fmtN(Math.round(p.revenue))} ﺩﻫ</span></div><div class="prod-stat"><span class="prod-stat-label">متوسط السعر</span><span class="prod-stat-val">${fmtN(avg)} ﺩﻫ</span></div>`;
+    grid.appendChild(card);
+  });
+  renderTopList('variants-list', (s.topVariants||[]).map(v=>({name:v.name,count:v.count})), '#e84393');
+  const barsEl=document.getElementById('prod-delivery-bars'); barsEl.innerHTML='';
+  delProds.slice(0,6).forEach((p,i)=>{
+    const total=(prods.find(x=>x.name===p.name)||{count:p.delivered}).count||p.delivered;
+    const r=total?Math.round((p.delivered/total)*100):0;
+    const div=document.createElement('div');
+    div.style.cssText='margin-bottom:14px;';
+    div.innerHTML=`<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px;"><span style="color:var(--muted)">${p.name.slice(0,22)}</span><span style="font-family:'Space Mono',monospace">${r}%</span></div><div class="progress-bar-bg"><div class="progress-bar-fill" style="width:0;background:var(--accent3)" data-w="${r}"></div></div>`;
+    barsEl.appendChild(div);
+    setTimeout(()=>{const b=div.querySelector('.progress-bar-fill');if(b)b.style.width=b.dataset.w+'%';},100+i*80);
+  });
+}
+
+// ─── DELIVERY PAGE ───
+function renderDeliveryPage(s) {
+  const cards=[
+    {label:'مُسلَّمة',val:fmtN(s.delivered),cls:'c3',sub:pct(s.deliveryRate)+' من المؤكدة'},
+    {label:'ملغي التوصيل',val:fmtN(s.deliveryCancelled),cls:'c5',sub:''},
+    {label:'بدون رد',val:fmtN(s.deliveryNoResponse),cls:'',sub:''},
+    {label:'مرجأ',val:fmtN(s.deliveryReported||0),cls:'c4',sub:''},
+  ];
+  const el=document.getElementById('del-stats-cards'); el.innerHTML='';
+  cards.forEach(c=>{
+    const d=document.createElement('div');
+    d.className='stat-card '+(c.cls||'');
+    d.innerHTML=`<div class="stat-val">${c.val}</div><div class="stat-label">${c.label}</div>${c.sub?`<div class="stat-sub">${c.sub}</div>`:''}`;
+    el.appendChild(d);
+  });
+  renderDonut('donutDel','donut-del-val','del-total-badge','del-legend',s.deliveryStatus,s.deliveryRate,'del');
+  const confirmedCities = (s.topCities||[]);
+  renderTopList('del-cities-list', confirmedCities, '#00d4aa');
+  const tb=document.getElementById('del-prod-tbody'); tb.innerHTML='';
+  const allTop = (s.topProducts||[]);
+  (s.productDelivered||[]).slice(0,10).forEach((p,i)=>{
+    const tot=(allTop.find(x=>cleanProd(x.name)===cleanProd(p.name))||{count:p.delivered}).count||p.delivered;
+    const rate=tot?Math.round((p.delivered/tot)*100):0;
+    const avg=p.delivered?Math.round(p.revenue/p.delivered):0;
+    const tr=document.createElement('tr');
+    tr.className='fade-in'; tr.style.animationDelay=(i*0.04)+'s';
+    tr.innerHTML=`<td style="font-weight:600">${cleanProd(p.name).slice(0,30)}</td><td style="font-family:'Space Mono',monospace">${fmtN(p.delivered)}</td><td style="font-family:'Space Mono',monospace;color:var(--accent4)">${fmtN(Math.round(p.revenue))} ﺩﻫ</td><td style="font-family:'Space Mono',monospace">${fmtN(avg)} ﺩﻫ</td><td><span class="badge ${rate>=60?'badge-delivered':rate>=40?'badge-pending':'badge-cancelled'}">${rate}%</span></td>`;
+    tb.appendChild(tr);
+  });
+}
+
+// ─── HISTORY PAGE ───
+function switchHistoryTab(el, tab) {
+  document.querySelectorAll('.htab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  currentHistTab = tab;
+  histPage = 1;
+  renderHistoryTable();
+}
+
+function getHistData() {
+  if (!G) return [];
+  return G.orders || [];
+}
+
+function renderHistoryTable() {
+  const data = getHistData();
+  const q=(document.getElementById('hist-search')?.value||'').toLowerCase().trim();
+  const filtered=data.filter(o=>!q||[o.name,o.city,o.product,o.confirmation,o.delivered].join(' ').toLowerCase().includes(q));
+  const total=filtered.length;
+  const totalPages=Math.ceil(total/HIST_PER_PAGE)||1;
+  if(histPage>totalPages) histPage=totalPages;
+  const slice=filtered.slice((histPage-1)*HIST_PER_PAGE,histPage*HIST_PER_PAGE);
+  setText('hist-tab-title','Youcan Orders');
+  setText('hist-badge',fmtN(total)+' طلب');
+  document.getElementById('hist-thead').innerHTML=`<tr><th>#</th><th>التاريخ</th><th>العميل</th><th>الهاتف</th><th>المدينة</th><th>المنتج</th><th>المقاس</th><th>السعر</th><th>التأكيد</th><th>التوصيل</th></tr>`;
+  const tb=document.getElementById('hist-tbody'); tb.innerHTML='';
+  if(!slice.length){tb.innerHTML='<tr><td colspan="10" class="empty">لا توجد نتائج</td></tr>';return;}
+  slice.forEach((o,i)=>{
+    const tr=document.createElement('tr');
+    tr.className='fade-in'; tr.style.animationDelay=(i*0.01)+'s';
+    tr.innerHTML=`<td style="color:var(--muted);font-size:11px">${(histPage-1)*HIST_PER_PAGE+i+1}</td><td style="font-family:'Space Mono',monospace;font-size:10px;color:var(--muted)">${fmtDate(o.date)}</td><td style="font-weight:600">${o.name||'—'}</td><td style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted)">${o.phone||'—'}</td><td style="color:var(--muted)">${o.city||'—'}</td><td style="max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted)">${cleanProd(o.product).slice(0,25)}</td><td style="font-size:11px;color:var(--muted)">${o.variant||'—'}</td><td style="font-family:'Space Mono',monospace;font-size:11px;color:var(--accent4)">${o.price?fmtN(o.price)+' ﺩﻫ':'—'}</td><td><span class="badge ${getBadgeClass(o.confirmation)}">${o.confirmation||'—'}</span></td><td><span class="badge ${getBadgeClass(o.delivered)}">${o.delivered||'—'}</span></td>`;
+    tb.appendChild(tr);
+  });
+  renderPagination('hist-pagination',histPage,totalPages,pg=>{histPage=pg;renderHistoryTable();});
+}
+
+// ─── CITIES PAGE ───
+function renderCitiesPage(s) {
+  const cities=(s.topCities||[]).slice(0,10);
+  const total=cities.reduce((a,c)=>a+c.count,0);
+  renderBarChart(cities);
+  renderCityDonut(cities,total);
+  const tb=document.getElementById('cities-tbody'); tb.innerHTML='';
+  cities.forEach((c,i)=>{
+    const p=total?((c.count/total)*100).toFixed(1):'0';
+    const w=cities[0].count?Math.round((c.count/cities[0].count)*100):0;
+    const tr=document.createElement('tr');
+    tr.className='fade-in'; tr.style.animationDelay=(i*0.04)+'s';
+    tr.innerHTML=`<td style="font-family:'Space Mono',monospace;color:var(--muted)">${String(i+1).padStart(2,'0')}</td><td style="font-weight:700">${c.name}</td><td style="font-family:'Space Mono',monospace">${fmtN(c.count)}</td><td style="font-family:'Space Mono',monospace;color:var(--accent)">${p}%</td><td style="min-width:100px"><div class="item-bar-wrap" style="margin:0"><div class="item-bar" style="width:0;background:var(--accent)" data-w="${w}"></div></div></td>`;
+    tb.appendChild(tr);
+    setTimeout(()=>{const b=tr.querySelector('.item-bar');if(b)b.style.width=b.dataset.w+'%';},80+i*50);
+  });
+}
+
+function renderBarChart(cities) {
+  const canvas=document.getElementById('barChart');
+  const wrap=canvas.parentElement;
+  canvas.width=wrap.offsetWidth-2;
+  canvas.height=wrap.offsetHeight-4;
+  const ctx=canvas.getContext('2d');
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  if(!cities?.length) return;
+  const W=canvas.width,H=canvas.height;
+  const pad={top:14,right:14,bottom:60,left:44};
+  const cW=W-pad.left-pad.right,cH=H-pad.top-pad.bottom;
+  const maxVal=cities[0].count;
+  const bw=Math.max(8,Math.min(36,(cW/cities.length)*0.65));
+  const gap=(cW-bw*cities.length)/(cities.length-1||1);
+  for(let i=0;i<=4;i++){
+    const y=pad.top+cH-(i/4)*cH;
+    ctx.beginPath();ctx.strokeStyle='rgba(255,255,255,0.04)';ctx.lineWidth=1;
+    ctx.moveTo(pad.left,y);ctx.lineTo(pad.left+cW,y);ctx.stroke();
+    ctx.fillStyle='#6b7299';ctx.font='9px Space Mono,monospace';ctx.textAlign='right';
+    ctx.fillText(Math.round((i/4)*maxVal),pad.left-4,y+4);
+  }
+  const colors=['#7c5cfc','#e84393','#00d4aa','#f5a623','#ff4d6d','#5bc4f5','#a78bfa','#34d399','#fb923c','#f472b6'];
+  cities.forEach((c,i)=>{
+    const x=pad.left+i*(bw+gap);
+    const bh=(c.count/maxVal)*cH;
+    const y=pad.top+cH-bh;
+    const g=ctx.createLinearGradient(0,y,0,pad.top+cH);
+    const col=colors[i%colors.length];
+    g.addColorStop(0,col);g.addColorStop(1,col+'44');
+    ctx.beginPath();ctx.roundRect?ctx.roundRect(x,y,bw,bh,4):ctx.rect(x,y,bw,bh);
+    ctx.fillStyle=g;ctx.fill();
+    ctx.save();ctx.translate(x+bw/2,pad.top+cH+8);ctx.rotate(-Math.PI/4);
+    ctx.fillStyle='#6b7299';ctx.font='9px Cairo,sans-serif';ctx.textAlign='right';
+    ctx.fillText(c.name.slice(0,10),0,0);ctx.restore();
+  });
+}
+
+function renderCityDonut(cities, total) {
+  const colors=['#7c5cfc','#e84393','#00d4aa','#f5a623','#ff4d6d','#5bc4f5','#a78bfa','#34d399','#fb923c','#f472b6'];
+  const canvas=document.getElementById('donutCity');
+  if(!canvas) return;
+  const ctx=canvas.getContext('2d');
+  const W=canvas.width,H=canvas.height;
+  const cx=W/2,cy=H/2,r=Math.min(W,H)/2-4,ir=r*0.52;
+  ctx.clearRect(0,0,W,H);
+  let angle=-Math.PI/2;
+  cities.forEach((c,i)=>{
+    const slice=(c.count/total)*2*Math.PI;
+    ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,angle,angle+slice);
+    ctx.fillStyle=colors[i%colors.length];ctx.fill();angle+=slice;
+  });
+  ctx.beginPath();ctx.arc(cx,cy,ir,0,2*Math.PI);ctx.fillStyle='#131629';ctx.fill();
+  setText('donut-city-val',cities.length);
+  const leg=document.getElementById('city-legend');leg.innerHTML='';
+  cities.slice(0,6).forEach((c,i)=>{
+    const p=((c.count/total)*100).toFixed(1);
+    leg.innerHTML+=`<div class="legend-item"><div class="legend-left"><div class="legend-dot" style="background:${colors[i]}"></div>${c.name}</div><div class="legend-val">${fmtN(c.count)} (${p}%)</div></div>`;
+  });
+}
+
+// ─── PAGINATION ───
+function renderPagination(id, current, total, cb) {
+  const el=document.getElementById(id); el.innerHTML='';
+  if(total<=1){el.innerHTML=`<span class="page-info">${fmtN((current-1)*ORDERS_PER_PAGE+1)} — نهاية</span>`;return;}
+  const makeBtn=(label,page,active)=>{
+    const b=document.createElement('button');
+    b.className='page-btn'+(active?' active':'');
+    b.textContent=label;
+    b.onclick=()=>cb(page);
+    return b;
+  };
+  if(current>1) el.appendChild(makeBtn('‹',current-1,false));
+  const start=Math.max(1,current-2), end=Math.min(total,current+2);
+  if(start>1){el.appendChild(makeBtn('1',1,false));if(start>2)el.appendChild(Object.assign(document.createElement('span'),{className:'page-info',textContent:'...'}));}
+  for(let p=start;p<=end;p++) el.appendChild(makeBtn(p,p,p===current));
+  if(end<total){if(end<total-1)el.appendChild(Object.assign(document.createElement('span'),{className:'page-info',textContent:'...'}));el.appendChild(makeBtn(total,total,false));}
+  if(current<total) el.appendChild(makeBtn('›',current+1,false));
+}
+
+// ─── TOAST ───
+function showToast(msg,dur=3000){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),dur);}
+
+// ─── INIT ───
+window.addEventListener('load',()=>{
+  loadData();
+  window.addEventListener('resize',()=>{if(G){renderLineChart(G.summary.ordersByDay);const a=document.querySelector('.page.active');if(a?.id==='page-cities')renderBarChart((G.summary.topCities||[]).slice(0,10));}});
+});
+</script>
+</body>
+</html>
