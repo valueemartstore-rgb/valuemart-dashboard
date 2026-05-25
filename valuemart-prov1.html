@@ -313,6 +313,20 @@ select.filter-sel option{background:var(--surface2);}
 @media(max-width:700px){.sidebar{position:fixed;transform:translateX(-100%);width:248px;}.sidebar.open{transform:translateX(0);}.main{margin-left:0;}.hamburger{display:flex!important;}.kpi-grid{grid-template-columns:repeat(2,1fr);}.panels-row,.bottom-row,.insight-row{grid-template-columns:1fr;}.prod-grid{grid-template-columns:1fr 1fr;}.del-stats{grid-template-columns:repeat(2,1fr);}.page{padding:14px;}.topbar{padding:11px 14px;}.quick-filters{display:none;}}
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99;}
 .overlay.active{display:block;}
+
+
+/* ======== VALUEMART FIX PATCH ======== */
+:root{--surface:#12172a;--surface2:#1a2038;--surface3:#242b48;--border:rgba(255,255,255,0.11);--border2:rgba(255,255,255,0.18);--text2:#b5bce0;--muted:#7d85aa;}
+.sidebar{background:#12172a;box-shadow:8px 0 30px rgba(0,0,0,.28);}
+.nav-item{color:#b8bfdc;}.nav-item:hover{background:#1d2440;color:#fff;}.nav-item.active{background:rgba(108,78,242,.18);color:#bcaeff;border-color:rgba(108,78,242,.34);}
+.topbar{flex-wrap:nowrap;}.topbar-left{min-width:0;flex-shrink:0;}.topbar-right{min-width:0;justify-content:flex-end;flex-wrap:nowrap;}.breadcrumb{min-width:0;}.bc-current{max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.status-select{appearance:none;-webkit-appearance:none;background:var(--surface2);border:1px solid var(--border2);color:var(--text);border-radius:6px;padding:4px 8px;font-family:'Space Mono','Cairo',monospace;font-size:10px;font-weight:700;outline:none;cursor:pointer;min-width:106px;}.status-select:focus{border-color:rgba(108,78,242,.65);box-shadow:0 0 0 2px rgba(108,78,242,.15);}.status-select.ok{color:var(--success);border-color:rgba(0,201,160,.3);background:rgba(0,201,160,.08);}.status-select.cancel{color:var(--danger);border-color:rgba(240,67,109,.3);background:rgba(240,67,109,.08);}.status-select.wait{color:var(--warn);border-color:rgba(240,165,0,.3);background:rgba(240,165,0,.08);}.status-select.neutral{color:#aab2d4;border-color:rgba(170,178,212,.22);background:rgba(170,178,212,.07);}
+@media(max-width:900px){.sidebar{width:248px;transform:translateX(-100%);z-index:100;}.sidebar.open{transform:translateX(0);}.main{margin-left:0;}.hamburger{display:flex!important;}.topbar-center{display:none;}.topbar{padding:10px 12px;gap:8px;}.topbar-right{gap:6px;}.quick-filters,.live-pill{display:none;}}
+@media(max-width:700px){body{overflow-x:hidden;}.topbar{display:grid;grid-template-columns:auto 1fr auto;align-items:center;padding:9px 10px;gap:8px;}.topbar-left{grid-column:1 / 3;min-width:0;}.topbar-right{grid-column:3 / 4;display:flex;gap:6px;}.breadcrumb .bc-home,.breadcrumb .bc-sep{display:none;}.breadcrumb .bc-current{max-width:145px;font-size:13px;}.date-range-picker{display:none;}.notif-btn{width:34px;height:34px;}.btn-refresh{width:34px;height:34px;padding:0;justify-content:center;font-size:0;}.btn-refresh svg{width:15px;height:15px;}.page{padding:12px;gap:12px;}.kpi-grid{grid-template-columns:1fr 1fr;gap:10px;}.kpi{padding:12px;}.kpi-val{font-size:21px;}.panel-header{padding:12px;gap:8px;}.panel-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.filter-bar{padding:10px;}.search-input{min-width:100%;}select.filter-sel{flex:1;min-width:130px;}.prod-grid{grid-template-columns:1fr;}.del-stats{grid-template-columns:1fr 1fr;}thead th,tbody td{padding:8px 10px;}}
+@media(max-width:420px){.kpi-grid,.del-stats{grid-template-columns:1fr;}.breadcrumb .bc-current{max-width:110px;}}
+
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.62);backdrop-filter:blur(2px);z-index:90;}
+.overlay.active{display:block;}
 </style>
 </head>
 <body>
@@ -973,35 +987,12 @@ function renderTopList(id,items,color) {
 }
 
 // ORDERS PAGE
-function getFilteredOrders() {
-  if(!G)return[];
-  const q=(document.getElementById('orders-search')?.value||'').toLowerCase().trim();
-  const cf=(document.getElementById('orders-conf-filter')?.value||'').toLowerCase();
-  const df=(document.getElementById('orders-del-filter')?.value||'').toLowerCase();
-  return(G.orders||[]).filter(o=>{
-    if(q&&!([o.name,o.city,o.product,o.phone,o.variant].join(' ').toLowerCase().includes(q)))return false;
-    if(cf&&!String(o.confirmation||'').toLowerCase().includes(cf))return false;
-    if(df&&!String(o.delivered||'').toLowerCase().includes(df))return false;
-    return true;
-  });
-}
-
-function renderOrdersPage() {
-  const filtered=getFilteredOrders();
-  const total=filtered.length;
-  const totalPages=Math.ceil(total/ORDERS_PER_PAGE)||1;
-  if(ordersPage>totalPages)ordersPage=totalPages;
-  const slice=filtered.slice((ordersPage-1)*ORDERS_PER_PAGE,ordersPage*ORDERS_PER_PAGE);
-  setText('orders-count-info',`${fmtN(total)} طلب`);
-  const tb=document.getElementById('orders-tbody');tb.innerHTML='';
-  if(!slice.length){tb.innerHTML='<tr><td colspan="10" class="empty">لا توجد طلبات</td></tr>';}
-  slice.forEach((o,i)=>{
-    const tr=document.createElement('tr');tr.className='fade-in';tr.style.animationDelay=(i*0.015)+'s';
-    tr.innerHTML=`<td style="color:var(--muted);font-size:10px;font-family:'Space Mono',monospace">${(ordersPage-1)*ORDERS_PER_PAGE+i+1}</td><td style="font-family:'Space Mono',monospace;font-size:10px;color:var(--muted)">${fmtDate(o.date)}</td><td style="font-weight:600;font-family:'Cairo',sans-serif">${o.name||'—'}</td><td style="font-family:'Space Mono',monospace;font-size:10px;color:var(--muted)">${o.phone||'—'}</td><td style="color:var(--text2)">${o.city||'—'}</td><td style="color:var(--text2);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${cleanProd(o.product).slice(0,26)}</td><td style="color:var(--muted);font-size:11px">${o.variant||'—'}</td><td style="font-family:'Space Mono',monospace;font-size:11px;color:var(--accent4)">${o.price?fmtN(o.price)+' ﺩﻫ':'—'}</td><td><span class="badge ${getBadgeClass(o.confirmation)}">${o.confirmation||'—'}</span></td><td><span class="badge ${getBadgeClass(o.delivered)}">${o.delivered||'—'}</span></td>`;
-    tb.appendChild(tr);
-  });
-  renderPagination('orders-pagination',ordersPage,totalPages,pg=>{ordersPage=pg;renderOrdersPage();});
-}
+function esc(v){return String(v ?? '').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'","&#039;");}
+function statusUiClass(v){const x=String(v||'').toLowerCase();if(x.includes('confirmer')||x.includes('livree')||x.includes('livrée'))return'ok';if(x.includes('annuler'))return'cancel';if(x.includes('reporte')||x.includes('reporté')||x.includes('reminder'))return'wait';return'neutral';}
+function statusSelect(type,index,value){const v=String(value||'').toLowerCase();const opts=type==='confirmation'?[['','—'],['confirmer','confirmer'],['annuler','annuler'],['reminder','reminder']]:[['','—'],['livree','livree'],['annuler','annuler'],['reponse','reponse'],['reporte','reporte']];return `<select class="status-select ${statusUiClass(value)}" onchange="updateOrderStatus(${index},'${type}',this)">${opts.map(([val,label])=>`<option value="${val}" ${((val&&v.includes(val))||(!val&&!v))?'selected':''}>${label}</option>`).join('')}</select>`;}
+function updateOrderStatus(index,type,el){if(!G||!G.orders||!G.orders[index])return;if(type==='confirmation')G.orders[index].confirmation=el.value;else G.orders[index].delivered=el.value;el.className='status-select '+statusUiClass(el.value);showToast('✓ تبدلات الحالة');}
+function getFilteredOrders(){if(!G)return[];const q=(document.getElementById('orders-search')?.value||'').toLowerCase().trim();const cf=(document.getElementById('orders-conf-filter')?.value||'').toLowerCase();const df=(document.getElementById('orders-del-filter')?.value||'').toLowerCase();return(G.orders||[]).map((o,idx)=>({...o,_realIndex:idx})).filter(o=>{if(q&&!([o.name,o.city,o.product,o.phone,o.variant,o.confirmation,o.delivered].join(' ').toLowerCase().includes(q)))return false;if(cf&&!String(o.confirmation||'').toLowerCase().includes(cf))return false;if(df&&!String(o.delivered||'').toLowerCase().includes(df))return false;return true;});}
+function renderOrdersPage(){const filtered=getFilteredOrders();const total=filtered.length;const totalPages=Math.ceil(total/ORDERS_PER_PAGE)||1;if(ordersPage>totalPages)ordersPage=totalPages;if(ordersPage<1)ordersPage=1;const slice=filtered.slice((ordersPage-1)*ORDERS_PER_PAGE,ordersPage*ORDERS_PER_PAGE);setText('orders-count-info',`${fmtN(total)} طلب`);const tb=document.getElementById('orders-tbody');tb.innerHTML='';if(!slice.length){tb.innerHTML='<tr><td colspan="10" class="empty">لا توجد طلبات</td></tr>';renderPagination('orders-pagination',ordersPage,totalPages,pg=>{ordersPage=pg;renderOrdersPage();});return;}slice.forEach((o,i)=>{const tr=document.createElement('tr');tr.className='fade-in';tr.style.animationDelay=(i*0.015)+'s';tr.innerHTML=`<td style="color:var(--muted);font-size:10px;font-family:'Space Mono',monospace">${(ordersPage-1)*ORDERS_PER_PAGE+i+1}</td><td style="font-family:'Space Mono',monospace;font-size:10px;color:var(--muted)">${fmtDate(o.date)}</td><td style="font-weight:600;font-family:'Cairo',sans-serif">${esc(o.name||'—')}</td><td style="font-family:'Space Mono',monospace;font-size:10px;color:var(--muted)">${esc(o.phone||'—')}</td><td style="color:var(--text2)">${esc(o.city||'—')}</td><td style="color:var(--text2);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(cleanProd(o.product))}">${esc(cleanProd(o.product).slice(0,26))}</td><td style="color:var(--muted);font-size:11px">${esc(o.variant||'—')}</td><td style="font-family:'Space Mono',monospace;font-size:11px;color:var(--accent4)">${o.price?fmtN(o.price)+' ﺩﻫ':'—'}</td><td>${statusSelect('confirmation',o._realIndex,o.confirmation)}</td><td>${statusSelect('delivery',o._realIndex,o.delivered)}</td>`;tb.appendChild(tr);});renderPagination('orders-pagination',ordersPage,totalPages,pg=>{ordersPage=pg;renderOrdersPage();});}
 
 // PRODUCTS PAGE
 function renderProductsPage(s) {
