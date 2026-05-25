@@ -401,15 +401,15 @@ select.filter-sel option{background:var(--surface2);}
         <div class="acct-store">ValueMart Store</div>
       </div>
       <div class="acct-menu">
-        <div class="acct-item">
+        <div class="acct-item" onclick="navigate('overview');showToast('Profile: ValueMart Store')">
           <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 10-16 0"/></svg>
           Profile
         </div>
-        <div class="acct-item" onclick="navigate('overview')">
+        <div class="acct-item" onclick="showToast('Settings جاهزة')">
           <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v2m0 16v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M2 12h2m16 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
           Settings
         </div>
-        <div class="acct-item">
+        <div class="acct-item" onclick="showToast('Help: Dashboard ديال ValueMart')">
           <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
           Help & Docs
         </div>
@@ -422,7 +422,7 @@ select.filter-sel option{background:var(--surface2);}
           <span id="acct-status-text" style="font-size:10px;font-family:'Space Mono',monospace;color:var(--muted);">—</span>
         </div>
         <div class="acct-divider"></div>
-        <div class="acct-item danger">
+        <div class="acct-item danger" onclick="showToast('Log out غير واجهة فقط', true)">
           <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
           Log Out
         </div>
@@ -460,7 +460,7 @@ select.filter-sel option{background:var(--surface2);}
     <div class="topbar-center">
       <div class="global-search">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-        <input type="text" placeholder="Search orders, cities, products...">
+        <input type="text" id="global-search-input" placeholder="Search orders, cities, products...">
         <span class="search-kbd">⌘K</span>
       </div>
     </div>
@@ -751,7 +751,7 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbzFgNkVD2pQy9U9LRfJlTrp
 
 let G = null;
 let ordersPage = 1;
-const ORDERS_PER_PAGE = 1000; // FIX: show all orders, not only 20 per page
+const ORDERS_PER_PAGE = 9999; // patched: show all orders, not only 20
 let histPage = 1;
 const HIST_PER_PAGE = 25;
 let currentHistTab = 'youcan';
@@ -850,7 +850,6 @@ function setStatus(s){
 }
 
 function renderAllPages(data) {
-  setupGlobalSearch();
   renderOverview(data);
   const active=document.querySelector('.page.active');
   if(active&&active.id!=='page-overview'){renderPage(active.id.replace('page-',''));}
@@ -875,9 +874,9 @@ function removeSkeleton(...ids){ids.forEach(id=>{const el=document.getElementByI
 
 function renderOverview(data) {
   const s=data.summary;
-  const realTotal=(data.orders||[]).length || data.filteredRows || data.totalRows || 0;
-  setText('s-total',fmtN(realTotal));
-  setText('s-filtered',fmtN(realTotal)+' مفلترة');
+  const realOrdersCount=(data.orders||[]).length || data.filteredRows || data.totalRows || 0;
+  setText('s-total',fmtN(realOrdersCount));
+  setText('s-filtered',fmtN(realOrdersCount)+' طلب');
   setText('s-confirmed',fmtN(s.confirmed));
   setText('s-conf-rate',pct(s.confirmationRate)+' نسبة التأكيد');
   setText('s-delivered',fmtN(s.delivered));
@@ -896,7 +895,7 @@ function renderOverview(data) {
   renderTopList('ov-cities',s.topCities,'#6c4ef2');
   renderTopList('ov-products',(s.topProducts||[]).map(p=>({...p,name:cleanProd(p.name).slice(0,28)})),'#f0437a');
   renderMiniOrdersTable(data.orders);
-  setText('orders-count-badge',(data.orders||[]).length+' حديثة');
+  setText('orders-count-badge',(data.orders||[]).length+' طلب');
 }
 
 function renderMiniOrdersTable(orders) {
@@ -1003,7 +1002,7 @@ function statusLabel(value){return STATUS_LABEL[String(value||'').toLowerCase()]
 function statusControl(type,index,value){return `<button class="status-pill ${statusUiClass(value)}" onclick="cycleOrderStatus(${index},'${type}')" title="انقر لتغيير الحالة">${statusLabel(value)}</button>`;}
 function cycleOrderStatus(index,type){if(!G||!G.orders||!G.orders[index])return;const opts=STATUS_OPTIONS[type]||[];const current=String(G.orders[index][type]||'').toLowerCase();const currIndex=opts.findIndex(v=>current.includes(v));const nextIndex=(currIndex+1)%opts.length;G.orders[index][type]=opts[nextIndex]||'';renderOrdersPage();showToast('✓ تم تحديث حالة الطلب');}
 function getFilteredOrders(){if(!G)return[];const q=(document.getElementById('orders-search')?.value||'').toLowerCase().trim();const cf=(document.getElementById('orders-conf-filter')?.value||'').toLowerCase();const df=(document.getElementById('orders-del-filter')?.value||'').toLowerCase();return(G.orders||[]).map((o,idx)=>({...o,_realIndex:idx})).filter(o=>{if(q&&!([o.name,o.city,o.product,o.phone,o.variant,o.confirmation,o.delivered].join(' ').toLowerCase().includes(q)))return false;if(cf&&!String(o.confirmation||'').toLowerCase().includes(cf))return false;if(df&&!String(o.delivered||'').toLowerCase().includes(df))return false;return true;});}
-function renderOrdersPage(){const filtered=getFilteredOrders();const total=filtered.length;const totalPages=Math.ceil(total/ORDERS_PER_PAGE)||1;if(ordersPage>totalPages)ordersPage=totalPages;if(ordersPage<1)ordersPage=1;const slice=filtered.slice((ordersPage-1)*ORDERS_PER_PAGE,ordersPage*ORDERS_PER_PAGE);setText('orders-count-info',`${fmtN(total)} طلب`);const tb=document.getElementById('orders-tbody');tb.innerHTML='';if(!slice.length){tb.innerHTML='<tr><td colspan="10" class="empty">لا توجد طلبات</td></tr>';renderPagination('orders-pagination',ordersPage,totalPages,pg=>{ordersPage=pg;renderOrdersPage();});return;}slice.forEach((o,i)=>{const tr=document.createElement('tr');tr.className='fade-in';tr.style.animationDelay=(i*0.015)+'s';tr.innerHTML=`<td style="color:var(--muted);font-size:10px;font-family:'Space Mono',monospace">${(ordersPage-1)*ORDERS_PER_PAGE+i+1}</td><td style="font-family:'Space Mono',monospace;font-size:10px;color:var(--muted)">${fmtDate(o.date)}</td><td style="font-weight:600;font-family:'Cairo',sans-serif">${esc(o.name||'—')}</td><td style="font-family:'Space Mono',monospace;font-size:10px;color:var(--muted)">${esc(o.phone||'—')}</td><td style="color:var(--text2)">${esc(o.city||'—')}</td><td style="color:var(--text2);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(cleanProd(o.product))}">${esc(cleanProd(o.product).slice(0,26))}</td><td style="color:var(--muted);font-size:11px">${esc(o.variant||'—')}</td><td style="font-family:'Space Mono',monospace;font-size:11px;color:var(--accent4)">${o.price?fmtN(o.price)+' ﺩﻫ':'—'}</td><td>${statusControl('confirmation',o._realIndex,o.confirmation)}</td><td>${statusControl('delivery',o._realIndex,o.delivered)}</td>`;tb.appendChild(tr);});renderPagination('orders-pagination',ordersPage,totalPages,pg=>{ordersPage=pg;renderOrdersPage();});}
+function renderOrdersPage(){const filtered=getFilteredOrders();const total=filtered.length;const totalPages=1;ordersPage=1;const slice=filtered;setText('orders-count-info',`${fmtN(total)} طلب`);const tb=document.getElementById('orders-tbody');tb.innerHTML='';if(!slice.length){tb.innerHTML='<tr><td colspan="10" class="empty">لا توجد طلبات</td></tr>';document.getElementById('orders-pagination').innerHTML=`<span class="page-info">عرض ${fmtN(total)} طلب كامل</span>`;return;}slice.forEach((o,i)=>{const tr=document.createElement('tr');tr.className='fade-in';tr.style.animationDelay=(i*0.015)+'s';tr.innerHTML=`<td style="color:var(--muted);font-size:10px;font-family:'Space Mono',monospace">${i+1}</td><td style="font-family:'Space Mono',monospace;font-size:10px;color:var(--muted)">${fmtDate(o.date)}</td><td style="font-weight:600;font-family:'Cairo',sans-serif">${esc(o.name||'—')}</td><td style="font-family:'Space Mono',monospace;font-size:10px;color:var(--muted)">${esc(o.phone||'—')}</td><td style="color:var(--text2)">${esc(o.city||'—')}</td><td style="color:var(--text2);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(cleanProd(o.product))}">${esc(cleanProd(o.product).slice(0,26))}</td><td style="color:var(--muted);font-size:11px">${esc(o.variant||'—')}</td><td style="font-family:'Space Mono',monospace;font-size:11px;color:var(--accent4)">${o.price?fmtN(o.price)+' ﺩﻫ':'—'}</td><td>${statusControl('confirmation',o._realIndex,o.confirmation)}</td><td>${statusControl('delivery',o._realIndex,o.delivered)}</td>`;tb.appendChild(tr);});document.getElementById('orders-pagination').innerHTML=`<span class="page-info">عرض ${fmtN(total)} طلب كامل</span>`;}
 
 // PRODUCTS PAGE
 function renderProductsPage(s) {
@@ -1164,44 +1163,6 @@ function renderPagination(id,current,total,cb) {
   for(let p=start;p<=end;p++)el.appendChild(makeBtn(p,p,p===current));
   if(end<total){if(end<total-1)el.appendChild(Object.assign(document.createElement('span'),{className:'page-info',textContent:'...'}));el.appendChild(makeBtn(total,total,false));}
   if(current<total)el.appendChild(makeBtn('›',current+1,false));
-}
-
-
-/* ===== VALUEMART SEARCH FIX ===== */
-function setupGlobalSearch(){
-  const input=document.querySelector('.global-search input');
-  const side=document.querySelector('.sidebar-search-box');
-  if(side && input && !side.dataset.bound){
-    side.dataset.bound='1';
-    side.onclick=()=>{ input.focus(); input.select(); };
-  }
-  if(!input || input.dataset.bound)return;
-  input.dataset.bound='1';
-  input.addEventListener('input',()=>{
-    const q=input.value.trim();
-    const page=document.querySelector('.page.active')?.id?.replace('page-','') || 'overview';
-    if(q){
-      if(page==='overview' || page==='cities') navigate('orders');
-      document.getElementById('orders-search').value=q;
-      ordersPage=1;
-      renderOrdersPage();
-    } else {
-      const os=document.getElementById('orders-search');
-      if(os) os.value='';
-      if(document.getElementById('page-orders')?.classList.contains('active')) renderOrdersPage();
-    }
-  });
-  input.addEventListener('keydown',e=>{
-    if(e.key==='Enter'){
-      const q=input.value.trim().toLowerCase();
-      if(!q || !G)return;
-      const productHit=(G.summary?.topProducts||[]).some(p=>cleanProd(p.name).toLowerCase().includes(q));
-      const cityHit=(G.summary?.topCities||[]).some(c=>String(c.name||'').toLowerCase().includes(q));
-      if(productHit && !cityHit) navigate('products');
-      else if(cityHit && !productHit) navigate('cities');
-      else navigate('orders');
-    }
-  });
 }
 
 // TOAST
