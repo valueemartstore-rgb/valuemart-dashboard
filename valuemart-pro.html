@@ -1,1 +1,1391 @@
-<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>VALUEMART PRO V1</title><script src="https://cdn.jsdelivr.net/npm/chart.js"></script><style>@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');:root{--b:#03071E;--g:#FFD166;--m:#9ca8c7;--bd:rgba(255,255,255,.12);--ok:#2DD4BF;--bad:#FB7185}*{box-sizing:border-box}body{margin:0;font-family:Cairo,sans-serif;background:radial-gradient(circle at top right,rgba(45,212,191,.15),transparent 30%),radial-gradient(circle at bottom left,rgba(96,165,250,.10),transparent 28%),var(--b);color:#fff}.app{display:grid;grid-template-columns:270px 1fr;min-height:100vh}aside{position:sticky;top:0;height:100vh;padding:20px;border-left:1px solid var(--bd);background:rgba(255,255,255,.05)}.logo{border:1px solid var(--bd);border-radius:22px;padding:18px;background:rgba(255,255,255,.07);margin-bottom:16px}.logo b{font-size:22px}.sub{color:var(--m);font-weight:800}.nav{display:grid;gap:8px}.nav button{text-align:right;border:1px solid transparent;background:transparent;color:#eaf0ff;border-radius:15px;padding:13px;font-family:Cairo;font-weight:900;cursor:pointer}.nav button.active,.nav button:hover{background:rgba(255,255,255,.09);border-color:var(--bd)}main{padding:24px}.top{display:flex;justify-content:space-between;gap:15px;align-items:flex-start;margin-bottom:18px}h1{margin:0;font-size:28px}.actions{display:flex;gap:10px;flex-wrap:wrap}.btn,.pill{border:1px solid var(--bd);border-radius:999px;padding:11px 15px;font-family:Cairo;font-weight:900}.btn{cursor:pointer;background:linear-gradient(135deg,var(--g),#ffb703);color:var(--b);border:0}.ghost{cursor:pointer;background:rgba(255,255,255,.08);color:#fff}.pill{background:rgba(255,255,255,.08)}.page{display:none}.page.active{display:block}.grid{display:grid;gap:16px}.kpis{grid-template-columns:repeat(5,1fr)}.two{grid-template-columns:1.4fr 1fr}.three{grid-template-columns:repeat(3,1fr)}.four{grid-template-columns:repeat(4,1fr)}.filter{grid-template-columns:repeat(6,1fr);align-items:end}.card{background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.055));border:1px solid var(--bd);border-radius:22px;padding:18px;box-shadow:0 20px 60px rgba(0,0,0,.32)}.kpi{min-height:130px}.kt{color:#dbe6ff;font-weight:900}.val{font-size:31px;font-weight:900;margin:14px 0 6px}.note{color:var(--m);font-size:12px;font-weight:800}label{display:block;color:#dbe6ff;font-size:12px;font-weight:900;margin-bottom:8px}input,select{width:100%;background:rgba(3,7,30,.76);border:1px solid var(--bd);color:#fff;border-radius:15px;padding:12px;font-family:Cairo;font-weight:900}input[type=date]{direction:ltr}.section{margin-top:20px}.head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}table{width:100%;border-collapse:collapse}th,td{padding:12px 8px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;font-size:13px}th{color:var(--g)}.badge{display:inline-flex;min-width:34px;justify-content:center;border-radius:999px;padding:4px 10px;background:rgba(45,212,191,.12);color:#8ff7e9;font-weight:900}.loader,.err{padding:22px;border-radius:20px;border:1px solid var(--bd);font-weight:900;text-align:center}.loader{color:var(--g)}.err{display:none;color:#fecdd3;background:rgba(251,113,133,.10)}canvas{max-height:330px}.chart{min-height:390px}.alert{border-color:rgba(255,209,102,.35);background:rgba(255,209,102,.10)}@media(max-width:1100px){.kpis{grid-template-columns:repeat(2,1fr)}.two,.three,.four,.filter{grid-template-columns:1fr 1fr}}@media(max-width:760px){.app{display:block}aside{position:relative;height:auto}.nav{grid-template-columns:1fr 1fr}.nav button{font-size:12px;padding:10px}main{padding:14px}.top{display:block}.actions{margin-top:12px}.kpis,.two,.three,.four,.filter{grid-template-columns:1fr}.card{border-radius:18px;padding:15px}.val{font-size:27px}table{display:block;overflow-x:auto;white-space:nowrap}}</style></head><body><div class="app"><aside><div class="logo"><b>VALUEMART</b><div class="sub">PRO V1 Dashboard</div></div><div class="nav"><button class="active" onclick="showPage('overview',this)">📊 Overview</button><button onclick="showPage('orders',this)">🧾 Orders</button><button onclick="showPage('profit',this)">💰 Profit</button><button onclick="showPage('products',this)">👗 Products</button><button onclick="showPage('cities',this)">📍 Cities</button><button onclick="showPage('follow',this)">📵 Follow-up</button><button onclick="showPage('insights',this)">🧠 Insights</button><button onclick="showPage('settings',this)">⚙️ Settings</button></div></aside><main><div class="top"><div><h1>📊 VALUEMART PRO V1</h1><div class="sub">Multi-page dashboard + filters + profit + insights</div></div><div class="actions"><span class="pill" id="status">⏳ كنجبد الداتا...</span><button class="btn" onclick="loadData()">تحديث 🔄</button></div></div><div id="err" class="err"></div><div id="loader" class="loader">⏳ كنجبد الطلبات من Google Sheet...</div><div id="content" style="display:none"><section class="section"><div class="card"><div class="grid filter"><div><label>اختيار سريع</label><select id="quick" onchange="quickFilter()"><option value="all">كلشي</option><option value="today">اليوم</option><option value="yesterday">البارح</option><option value="7">آخر 7 أيام</option><option value="week">هاد السيمانة</option><option value="month">هاد الشهر</option></select></div><div><label>من</label><input type="date" id="start"></div><div><label>حتى</label><input type="date" id="end"></div><div><button class="btn" onclick="customFilter()">طبق الفلتر</button></div><div><button class="ghost btn" onclick="resetFilter()">عرض كلشي</button></div><div><span class="pill" id="flabel">كلشي</span></div></div></div></section><section id="overview" class="page active"><div class="section"><div class="head"><h2>📊 Overview</h2><span class="sub">أهم المؤشرات</span></div><div class="grid kpis" id="overviewKpis"></div></div><div class="section"><div class="grid two"><div class="card chart"><h3>Orders by day</h3><canvas id="ordersChart"></canvas></div><div class="card chart"><h3>Confirmation</h3><canvas id="confirmationChart"></canvas></div></div></div></section><section id="orders" class="page"><div class="section"><div class="head"><h2>🧾 Orders</h2><span class="sub">آخر 20 طلبة</span></div><div class="card"><table><thead><tr><th>Date</th><th>Name</th><th>Phone</th><th>City</th><th>Product</th><th>Price</th><th>Confirm</th><th>Delivery</th></tr></thead><tbody id="ordersTable"></tbody></table></div></div></section><section id="profit" class="page"><div class="section"><div class="head"><h2>💰 Profit Center</h2><span class="sub">الربح الحقيقي حسب كل produit</span></div><div class="grid four"><div class="card"><label>Ad Spend $</label><input id="adSpend" type="number" value="86.77" oninput="calcProfit()"></div><div class="card"><label>USD/MAD</label><input id="usdMad" type="number" value="10" oninput="calcProfit()"></div><div class="card"><label>Spend MAD manual</label><input id="manualSpend" type="number" value="0" oninput="calcProfit()"><div class="note">إلا خليتيه 0 يحسب $×الصرف</div></div><div class="card"><label>Default profit/order</label><input id="defaultProfit" type="number" value="70" oninput="calcProfit()"></div></div><div class="grid kpis" style="margin-top:16px" id="profitKpis"></div><div class="card" style="margin-top:16px"><h3>Profit by Product</h3><table><thead><tr><th>Produit</th><th>Delivered</th><th>Revenue</th><th>Profit/order</th><th>Total</th></tr></thead><tbody id="profitTable"></tbody></table></div></div></section><section id="products" class="page"><div class="section"><div class="head"><h2>👗 Products</h2><span class="sub">أقوى المنتجات</span></div><div class="grid two"><div class="card"><h3>Top Products</h3><table><tbody id="productsTable"></tbody></table></div><div class="card chart"><h3>Product Delivered</h3><canvas id="productsChart"></canvas></div></div></div></section><section id="cities" class="page"><div class="section"><div class="head"><h2>📍 Cities</h2><span class="sub">فين كاين الطلب</span></div><div class="grid two"><div class="card"><h3>Top Cities</h3><table><tbody id="citiesTable"></tbody></table></div><div class="card chart"><h3>Cities Chart</h3><canvas id="citiesChart"></canvas></div></div></div></section><section id="follow" class="page"><div class="section"><div class="head"><h2>📵 Follow-up</h2><span class="sub">طلبات خاصها متابعة</span></div><div class="grid three" id="followCards"></div><div class="card" style="margin-top:16px"><h3>Templates WhatsApp</h3><p class="note">1) السلام أختي، كنأكد معاك الطلب ديالك من VALUEMART، واش باقي باغياه؟</p><p class="note">2) أختي التوصيل غادي يخرج قريب، عافاك جاوبي باش نثبتو الطلب.</p><p class="note">3) إلا بغيتي تبدلي اللون ولا المقاس قولي ليا دابا قبل الإرسال.</p></div></div></section><section id="insights" class="page"><div class="section"><div class="head"><h2>🧠 Insights</h2><span class="sub">شنو خاص تدير</span></div><div class="grid three" id="insightsCards"></div></div></section><section id="settings" class="page"><div class="section"><div class="head"><h2>⚙️ Settings</h2></div><div class="grid two"><div class="card"><h3>API</h3><p class="note" id="apiText"></p></div><div class="card"><h3>ملاحظة</h3><p class="note">أي تغيير فـ Apps Script خاصو New version Deploy. أي تغيير فـ GitHub Pages ممكن يحتاج Ctrl+F5.</p></div></div></div></section></div></main></div><script>const API_URL='https://script.google.com/macros/s/AKfycbzFgNkVD2pQy9U9LRfJlTrpk0tNQPMSoMmWH483ZCgfKmpFy3ArsQr5EV77AvzaBrleIw/exec';let data=null,charts=[],cs='',ce='';function showPage(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));btn.classList.add('active')}function dstr(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}function money(n){return'DH '+new Intl.NumberFormat('fr-MA').format(Math.round(n||0))}function pct(n){return((n||0)*100).toFixed(1)+'%'}function quickFilter(){let q=quick.value,t=new Date(),s='',e='';if(q==='today')s=e=dstr(t);if(q==='yesterday'){let y=new Date(t);y.setDate(y.getDate()-1);s=e=dstr(y)}if(q==='7'){let x=new Date(t);x.setDate(x.getDate()-6);s=dstr(x);e=dstr(t)}if(q==='week'){let x=new Date(t),day=x.getDay()||7;x.setDate(x.getDate()-day+1);s=dstr(x);e=dstr(t)}if(q==='month'){s=dstr(new Date(t.getFullYear(),t.getMonth(),1));e=dstr(t)}start.value=s;end.value=e;cs=s;ce=e;label();loadData()}function customFilter(){cs=start.value;ce=end.value;quick.value='all';label();loadData()}function resetFilter(){cs='';ce='';start.value='';end.value='';quick.value='all';label();loadData()}function label(){flabel.textContent=(!cs&&!ce)?'كلشي':(cs||'...')+' → '+(ce||'...')}function loadData(){data=null;loader.style.display='block';content.style.display='none';err.style.display='none';status.textContent='⏳ كنجبد الداتا...';let old=document.getElementById('jsonp');if(old)old.remove();let u=API_URL+'?callback=handleData&v='+Date.now();if(cs)u+='&start='+encodeURIComponent(cs);if(ce)u+='&end='+encodeURIComponent(ce);let s=document.createElement('script');s.id='jsonp';s.src=u;s.onerror=()=>showErr('API failed. دير New deploy ف Apps Script.');document.body.appendChild(s);setTimeout(()=>{if(!data)showErr('Timeout: ما وصلاتش الداتا.')},12000)}function handleData(res){if(!res||!res.success){showErr(res&&res.error?res.error:'API error');return}data=res;render(res);loader.style.display='none';content.style.display='block';status.textContent='✅ آخر تحديث: '+new Date(res.updatedAt).toLocaleString('fr-MA')}function showErr(m){loader.style.display='none';content.style.display='none';err.style.display='block';err.textContent='❌ '+m;status.textContent='API Error'}function kpi(t,v,n){return'<div class="card kpi"><div class="kt">'+t+'</div><div class="val">'+v+'</div><div class="note">'+(n||'')+'</div></div>'}function render(res){let s=res.summary;overviewKpis.innerHTML=kpi('Total Orders 🛒',s.totalOrders,'كل الطلبات')+kpi('Confirmed ✅',s.confirmed,'مؤكدة')+kpi('Cancelled ❌',s.cancelled,'ملغية')+kpi('Delivered 🚚',s.delivered,'توصلات')+kpi('No Response 📵',s.noResponse,'خاص متابعة')+kpi('Revenue Confirmed',money(s.revenueConfirmed),'درهم')+kpi('Revenue Delivered',money(s.revenueDelivered),'درهم')+kpi('Confirmation Rate',pct(s.confirmationRate),'هدفنا 70%+')+kpi('Delivery Rate',pct(s.deliveryRate),'confirmed → delivered')+kpi('AOV',money(s.aov),'متوسط الطلب');ordersTable.innerHTML=(res.orders||[]).map(o=>'<tr><td>'+o.date+'</td><td>'+o.name+'</td><td>'+o.phone+'</td><td>'+o.city+'</td><td>'+o.product+'</td><td>'+money(o.price)+'</td><td>'+o.confirmation+'</td><td>'+o.delivered+'</td></tr>').join('');citiesTable.innerHTML=(s.topCities||[]).map(x=>'<tr><td>'+x.name+'</td><td><span class="badge">'+x.count+'</span></td></tr>').join('');productsTable.innerHTML=(s.topProducts||[]).map(x=>'<tr><td>'+x.name+'</td><td><span class="badge">'+x.count+'</span></td></tr>').join('');profitTable.innerHTML=(s.productDelivered||[]).map(x=>{let kk=key(x.name),v=localStorage.getItem(kk)||defaultProfit.value;return'<tr><td>'+x.name+'</td><td><span class="badge">'+x.delivered+'</span></td><td>'+money(x.revenue)+'</td><td><input data-k="'+kk+'" data-d="'+x.delivered+'" class="pp" type="number" value="'+v+'" oninput="localStorage.setItem(this.dataset.k,this.value);calcProfit()"></td><td class="pt">0</td></tr>'}).join('');followCards.innerHTML=kpi('No Response',s.noResponse,'صيفط WhatsApp follow-up')+kpi('Cancelled',s.cancelled,'راجع السبب والعرض')+kpi('Delivery Problems',(s.deliveryCancelled||0)+(s.deliveryNoResponse||0),'تبع شركة التوصيل');let decision=s.confirmationRate>=.7?'التأكيد مزيان، ركز على scaling والعرض':'نسبة التأكيد ناقصة، خاص تحسين الاتصال وWhatsApp';let delivery=s.deliveryRate>=.65?'التوصيل مقبول':'خاص تتبع المدن/شركة التوصيل';let product=(s.topProducts&&s.topProducts[0])?s.topProducts[0].name:'مازال';insightsCards.innerHTML='<div class="card alert"><h3>Decision</h3><p>'+decision+'</p></div><div class="card alert"><h3>Delivery</h3><p>'+delivery+'</p></div><div class="card alert"><h3>Best Product</h3><p>'+product+'</p></div>';apiText.textContent=API_URL;draw(s);calcProfit()}function key(p){return'vm_'+btoa(unescape(encodeURIComponent(p))).replace(/=/g,'')}function calcProfit(){if(!data)return;let s=data.summary,sp=Number(manualSpend.value||0)||Number(adSpend.value||0)*Number(usdMad.value||0),g=0;document.querySelectorAll('.pp').forEach(i=>{let t=Number(i.value||0)*Number(i.dataset.d||0);g+=t;i.closest('tr').querySelector('.pt').textContent=money(t)});profitKpis.innerHTML=kpi('Gross Profit',money(g),'قبل ads')+kpi('Ad Spend MAD',money(sp),'ads')+kpi('Net Profit',money(g-sp),'بعد ads')+kpi('Margin',pct(s.revenueDelivered?(g-sp)/s.revenueDelivered:0),'net/revenue')+kpi('CPP الحقيقي',money(s.delivered?sp/s.delivered:0),'spend/delivered')}function clearCharts(){charts.forEach(c=>c.destroy());charts=[]}function opt(p){let o={responsive:true,maintainAspectRatio:false,plugins:{legend:{position:p?'bottom':'top',labels:{color:'#dce5ff',font:{family:'Cairo',weight:'700'}}}}};if(!p)o.scales={x:{ticks:{color:'#9ca8c7'},grid:{color:'rgba(255,255,255,.05)'}},y:{beginAtZero:true,ticks:{color:'#9ca8c7',precision:0},grid:{color:'rgba(255,255,255,.05)'}}};return o}function draw(s){clearCharts();charts.push(new Chart(ordersChart,{type:'line',data:{labels:(s.ordersByDay||[]).map(x=>x.date),datasets:[{label:'Orders',data:(s.ordersByDay||[]).map(x=>x.count),borderColor:'#2DD4BF',backgroundColor:'rgba(45,212,191,.16)',fill:true,tension:.35}]},options:opt(false)}));charts.push(new Chart(confirmationChart,{type:'doughnut',data:{labels:(s.confirmationStatus||[]).map(x=>x.name),datasets:[{data:(s.confirmationStatus||[]).map(x=>x.count),backgroundColor:['#2DD4BF','#FB7185','#FFD166','#60A5FA','#A78BFA'],borderColor:'#03071E',borderWidth:4}]},options:opt(true)}));charts.push(new Chart(citiesChart,{type:'bar',data:{labels:(s.topCities||[]).slice(0,7).map(x=>x.name),datasets:[{label:'Orders',data:(s.topCities||[]).slice(0,7).map(x=>x.count),backgroundColor:'rgba(96,165,250,.72)',borderRadius:10}]},options:opt(false)}));charts.push(new Chart(productsChart,{type:'bar',data:{labels:(s.productDelivered||[]).slice(0,7).map(x=>x.name),datasets:[{label:'Delivered',data:(s.productDelivered||[]).slice(0,7).map(x=>x.delivered),backgroundColor:'rgba(45,212,191,.70)',borderRadius:10}]},options:opt(false)}))}loadData();</script></body></html>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VALUEMART Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #07101b;
+      --bg2: #0a1320;
+      --side: #08111d;
+      --panel: #101a28;
+      --panel2: #0d1724;
+      --panel3: #152233;
+      --line: rgba(164, 179, 205, .14);
+      --line2: rgba(164, 179, 205, .08);
+      --text: #e9eef8;
+      --muted: #94a3b8;
+      --muted2: #64748b;
+      --purple: #7c4dff;
+      --purple2: #a855f7;
+      --pink: #ef476f;
+      --green: #20d69b;
+      --blue: #3b82f6;
+      --amber: #f59e0b;
+      --shadow: 0 24px 70px rgba(0, 0, 0, .34);
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 72% -8%, rgba(124, 77, 255, .16), transparent 28%),
+        linear-gradient(135deg, #07101b 0%, #091421 48%, #07101b 100%);
+      font-family: Inter, Cairo, system-ui, sans-serif;
+      letter-spacing: 0;
+    }
+
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    svg { display: block; }
+
+    .app {
+      display: grid;
+      grid-template-columns: 292px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr auto auto;
+      gap: 18px;
+      padding: 24px 14px 18px;
+      background: linear-gradient(180deg, rgba(8, 17, 29, .98), rgba(6, 13, 23, .98));
+      border-right: 1px solid var(--line);
+      box-shadow: 16px 0 60px rgba(0, 0, 0, .18);
+      z-index: 20;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 8px 18px;
+    }
+
+    .brand-mark {
+      font-size: 48px;
+      line-height: .8;
+      font-weight: 900;
+      background: linear-gradient(145deg, #db40ff, #7c4dff 60%, #20d69b);
+      color: transparent;
+      -webkit-background-clip: text;
+      background-clip: text;
+      letter-spacing: -6px;
+      font-family: Inter, sans-serif;
+    }
+
+    .brand-title {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1;
+      font-weight: 900;
+      letter-spacing: .5px;
+    }
+
+    .brand-sub, .small {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .nav {
+      display: grid;
+      align-content: start;
+      gap: 8px;
+    }
+
+    .nav button {
+      width: 100%;
+      min-height: 48px;
+      display: grid;
+      grid-template-columns: 26px 1fr auto;
+      align-items: center;
+      gap: 10px;
+      padding: 0 14px;
+      color: #cbd5e1;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: var(--radius);
+      text-align: left;
+      transition: .16s ease;
+    }
+
+    .nav button.active,
+    .nav button:hover {
+      color: white;
+      background: linear-gradient(135deg, rgba(124, 77, 255, .72), rgba(74, 41, 169, .78));
+      border-color: rgba(167, 139, 250, .28);
+      box-shadow: 0 10px 28px rgba(124, 77, 255, .24);
+    }
+
+    .nav-ico { width: 20px; height: 20px; opacity: .94; }
+
+    .plan, .profile-mini {
+      margin: 0 0;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(16, 26, 40, .86), rgba(10, 19, 32, .86));
+    }
+
+    .plan strong { display: block; margin-bottom: 4px; }
+    .meter {
+      height: 7px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, .12);
+      margin: 12px 0 10px;
+    }
+    .meter span {
+      display: block;
+      width: 78%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--purple), var(--purple2));
+    }
+
+    .profile-mini {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .avatar {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #e2e8f0, #64748b);
+      color: #0f172a;
+      font-weight: 900;
+    }
+
+    .main { min-width: 0; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 12;
+      display: grid;
+      grid-template-columns: auto minmax(280px, 1fr) auto auto auto auto;
+      gap: 14px;
+      align-items: center;
+      min-height: 78px;
+      padding: 16px 18px;
+      background: rgba(7, 16, 27, .84);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(18px);
+    }
+
+    .hamburger { display: none; }
+    .control, .icon-btn, .hamburger {
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(16, 26, 40, .86), rgba(10, 19, 32, .86));
+      color: var(--text);
+      outline: none;
+    }
+
+    .search-wrap {
+      position: relative;
+    }
+    .search-wrap svg {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+    }
+    .search {
+      width: 100%;
+      min-height: 44px;
+      padding: 0 42px;
+    }
+    .control { padding: 0 14px; color-scheme: dark; }
+    .icon-btn, .hamburger {
+      width: 44px;
+      display: grid;
+      place-items: center;
+      position: relative;
+    }
+    .refresh {
+      width: auto;
+      grid-template-columns: 20px auto;
+      gap: 8px;
+      padding: 0 16px;
+    }
+    .badge {
+      position: absolute;
+      top: -7px;
+      right: -7px;
+      min-width: 20px;
+      height: 20px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: var(--pink);
+      color: white;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .content {
+      padding: 16px 18px 0;
+    }
+
+    .page { display: none; }
+    .page.active { display: block; }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(170px, 1fr));
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(180deg, rgba(16, 26, 40, .92), rgba(10, 19, 32, .94)),
+        radial-gradient(circle at top right, rgba(124, 77, 255, .14), transparent 36%);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .card-pad { padding: 16px; }
+
+    .kpi {
+      min-height: 126px;
+      display: grid;
+      grid-template-columns: 1fr 58px;
+      gap: 10px;
+      padding: 18px 18px 16px;
+    }
+
+    .kpi-label {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: #dbe4f1;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .kpi-value {
+      margin-top: 16px;
+      font-family: Space Mono, monospace;
+      font-size: 28px;
+      line-height: 1;
+      font-weight: 700;
+    }
+    .kpi-change {
+      margin-top: 10px;
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .kpi-change.down { color: var(--pink); }
+    .kpi-icon {
+      width: 56px;
+      height: 56px;
+      display: grid;
+      place-items: center;
+      border-radius: 7px;
+      justify-self: end;
+    }
+    .i-purple { background: linear-gradient(135deg, var(--purple), #5b2be0); }
+    .i-pink { background: linear-gradient(135deg, var(--pink), #b83270); }
+    .i-green { background: linear-gradient(135deg, var(--green), #0a9f8a); }
+    .i-amber { background: linear-gradient(135deg, var(--amber), #d97706); }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(430px, .85fr);
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: minmax(420px, .95fr) minmax(360px, .75fr) minmax(420px, .95fr);
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 16px 8px;
+    }
+    .card-title {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 800;
+    }
+    .mini-btn, .link-btn {
+      min-height: 36px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: rgba(15, 23, 42, .66);
+      color: #cbd5e1;
+    }
+    .link-btn {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      border: 0;
+      background: transparent;
+      color: #9b7cff;
+      padding: 0;
+      margin-top: 12px;
+    }
+
+    .chart-wrap { padding: 0 14px 8px; }
+    .legend {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      color: #cbd5e1;
+      font-size: 13px;
+      padding: 0 0 4px;
+    }
+    .legend span { display: inline-flex; align-items: center; gap: 7px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--purple); }
+    .dot.pink { background: var(--pink); }
+    .dot.green { background: var(--green); }
+    .dot.blue { background: var(--blue); }
+    .dot.amber { background: var(--amber); }
+    .dot.gray { background: #64748b; }
+
+    .chart-svg {
+      width: 100%;
+      min-height: 260px;
+    }
+    .axis { fill: #8ea0b8; font-size: 12px; font-family: Inter, sans-serif; }
+    .grid-line { stroke: rgba(148, 163, 184, .12); stroke-width: 1; }
+    .revenue-line { fill: none; stroke: var(--purple); stroke-width: 3; }
+    .orders-line { fill: none; stroke: var(--pink); stroke-width: 3; stroke-dasharray: 8 8; }
+    .chart-point { fill: var(--purple); }
+    .chart-point-pink { fill: var(--pink); }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    th, td {
+      padding: 11px 14px;
+      border-bottom: 1px solid var(--line2);
+      white-space: nowrap;
+      text-align: left;
+    }
+    th { color: #b8c3d6; font-size: 12px; font-weight: 700; }
+    td { color: #d9e2ef; }
+    .table-wrap { overflow-x: auto; }
+
+    .order-id { color: #9b7cff; font-family: Space Mono, monospace; }
+    .status {
+      display: inline-flex;
+      align-items: center;
+      min-height: 25px;
+      padding: 0 9px;
+      border-radius: 5px;
+      font-weight: 800;
+      font-size: 12px;
+    }
+    .st-green { color: var(--green); background: rgba(32, 214, 155, .09); border: 1px solid rgba(32, 214, 155, .28); }
+    .st-blue { color: #4ea1ff; background: rgba(59, 130, 246, .09); border: 1px solid rgba(59, 130, 246, .28); }
+    .st-amber { color: var(--amber); background: rgba(245, 158, 11, .09); border: 1px solid rgba(245, 158, 11, .28); }
+    .st-pink { color: var(--pink); background: rgba(239, 71, 111, .09); border: 1px solid rgba(239, 71, 111, .28); }
+
+    .product-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 74px 104px 88px;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--line2);
+      font-size: 13px;
+    }
+    .product-main {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+    .thumb {
+      width: 34px;
+      height: 40px;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      border-radius: 5px;
+      background: linear-gradient(135deg, #d8c4b2, #27384c);
+      color: #0f172a;
+      font-weight: 900;
+    }
+    .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    .donut-layout {
+      display: grid;
+      grid-template-columns: 210px minmax(0, 1fr);
+      gap: 14px;
+      align-items: center;
+      padding: 6px 14px 16px;
+    }
+    .donut {
+      width: 190px;
+      height: 190px;
+      border-radius: 50%;
+      background: conic-gradient(var(--purple) 0 36%, var(--pink) 36% 53%, var(--green) 53% 68%, var(--amber) 68% 79%, var(--blue) 79% 87%, #64748b 87% 100%);
+      position: relative;
+      margin: auto;
+    }
+    .donut::after {
+      content: "";
+      position: absolute;
+      inset: 44px;
+      border-radius: 50%;
+      background: #0b1522;
+      box-shadow: inset 0 0 0 1px var(--line);
+    }
+    .donut-center {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      z-index: 2;
+      text-align: center;
+      pointer-events: none;
+    }
+    .donut-center strong { font-family: Space Mono, monospace; font-size: 24px; }
+
+    .city-row, .status-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 7px 0;
+      color: #dbe4f1;
+      font-size: 13px;
+    }
+    .city-row span:first-child {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .bar {
+      height: 8px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, .10);
+    }
+    .bar span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--green);
+    }
+    .status-list { padding: 8px 16px 16px; }
+    .status-row { grid-template-columns: 120px 1fr 92px; }
+
+    .orders-page-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 16px;
+    }
+    .orders-tools {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px;
+      border-bottom: 1px solid var(--line);
+    }
+    .status-select {
+      min-width: 138px;
+      min-height: 34px;
+      color: var(--text);
+      background: #0d1724;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 0 8px;
+    }
+
+    .simple-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .stat-card {
+      padding: 18px;
+      min-height: 132px;
+    }
+    .stat-card strong {
+      display: block;
+      margin-top: 14px;
+      font-family: Space Mono, monospace;
+      font-size: 28px;
+    }
+
+    .calendar-shell {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 360px;
+      gap: 16px;
+    }
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      padding: 16px;
+    }
+    .day-name {
+      color: var(--muted);
+      text-align: center;
+      font-size: 12px;
+      padding: 8px 0;
+    }
+    .day {
+      min-height: 88px;
+      padding: 10px;
+      color: var(--text);
+      text-align: left;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: rgba(13, 23, 36, .78);
+    }
+    .day.out { opacity: .32; }
+    .day.active { border-color: rgba(32, 214, 155, .62); }
+    .day b { display: block; margin-bottom: 8px; }
+    .day em {
+      display: inline-grid;
+      place-items: center;
+      min-width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      background: var(--purple);
+      font-style: normal;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .footer {
+      min-height: 64px;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 12px;
+      align-items: center;
+      padding: 0 30px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      background: rgba(7, 16, 27, .8);
+      font-size: 13px;
+    }
+    .footer span:last-child { text-align: right; }
+
+    .toast {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 50;
+      display: grid;
+      gap: 10px;
+    }
+    .toast-item {
+      width: min(360px, calc(100vw - 36px));
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #111c2b;
+      box-shadow: var(--shadow);
+    }
+
+    .denied {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+    .denied .card {
+      width: min(520px, 100%);
+      padding: 30px;
+      text-align: center;
+    }
+    .empty {
+      padding: 18px;
+      color: var(--muted);
+      border: 1px dashed var(--line);
+      border-radius: var(--radius);
+      text-align: center;
+    }
+
+    @media (max-width: 1320px) {
+      .kpi-grid { grid-template-columns: repeat(2, minmax(190px, 1fr)); }
+      .bottom-grid { grid-template-columns: 1fr; }
+      .dashboard-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 980px) {
+      .app { grid-template-columns: 1fr; }
+      .sidebar {
+        position: fixed;
+        left: 0;
+        transform: translateX(-100%);
+        transition: transform .2s ease;
+        width: 292px;
+      }
+      .sidebar.open { transform: translateX(0); }
+      .hamburger { display: grid; }
+      .topbar { grid-template-columns: auto minmax(0, 1fr) auto auto; }
+      .topbar .control.date-range, .topbar .status-filter { display: none; }
+      .calendar-shell { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      .content { padding: 12px; }
+      .topbar { padding: 12px; gap: 8px; }
+      .kpi-grid { grid-template-columns: 1fr; }
+      .kpi { grid-template-columns: 1fr auto; }
+      .donut-layout { grid-template-columns: 1fr; }
+      .product-row { grid-template-columns: 1fr 60px; }
+      .product-row .hide-sm { display: none; }
+      .footer { grid-template-columns: 1fr; text-align: left; padding: 16px; }
+      .footer span:last-child { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+  <div id="denied" class="denied" style="display:none">
+    <div class="card">
+      <div class="brand-mark" style="margin:auto;width:max-content">V</div>
+      <h2 id="deniedTitle">Access denied</h2>
+      <p id="deniedMessage" class="small">Ce compte Google n'est pas autorisé.</p>
+      <p id="deniedEmail" class="small"></p>
+    </div>
+  </div>
+
+  <div id="app" class="app">
+    <aside id="sidebar" class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">V</div>
+        <div>
+          <h1 class="brand-title">VALUEMART</h1>
+          <div class="brand-sub">Mode Femme • Maroc</div>
+        </div>
+      </div>
+      <nav id="nav" class="nav"></nav>
+      <div class="plan">
+        <strong>Plan Pro</strong>
+        <div class="small">Valable jusqu'au 12/08/2026</div>
+        <div class="meter"><span></span></div>
+        <div class="small">78% utilisé</div>
+      </div>
+      <div class="profile-mini">
+        <div class="avatar">Y</div>
+        <div style="min-width:0">
+          <strong id="profileName">Yasmine B.</strong>
+          <div class="small"><span style="color:var(--green)">●</span> <span id="profileRole">Administrateur</span></div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button id="menuBtn" class="hamburger" title="Menu">☰</button>
+        <div class="search-wrap">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="m21 21-4.35-4.35M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <input id="globalSearch" class="control search" type="search" placeholder="Rechercher (commandes, clients, produits...)">
+        </div>
+        <input id="startDate" class="control date-range" type="date" title="Début">
+        <input id="endDate" class="control date-range" type="date" title="Fin">
+        <select id="statusFilter" class="control status-filter">
+          <option value="all">Tous les statuts</option>
+          <option value="confirmer">Confirmées</option>
+          <option value="livree">Livrées</option>
+          <option value="annuler">Annulées</option>
+          <option value="pas de">Pas de réponse</option>
+          <option value="reportee">Reportées</option>
+        </select>
+        <button id="refreshBtn" class="icon-btn refresh" title="Actualiser">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M20 12a8 8 0 0 1-14.9 4M4 12A8 8 0 0 1 18.9 8M19 4v4h-4M5 20v-4h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Actualiser
+        </button>
+        <button id="bellBtn" class="icon-btn" title="Notifications">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9ZM13.7 21a2 2 0 0 1-3.4 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span id="notifBadge" class="badge">5</span>
+        </button>
+      </header>
+
+      <section class="content">
+        <div id="overview" class="page active"></div>
+        <div id="orders" class="page"></div>
+        <div id="products" class="page"></div>
+        <div id="clients" class="page"></div>
+        <div id="marketing" class="page"></div>
+        <div id="stock" class="page"></div>
+        <div id="delivery" class="page"></div>
+        <div id="returns" class="page"></div>
+        <div id="analytics" class="page"></div>
+        <div id="reports" class="page"></div>
+        <div id="settings" class="page"></div>
+      </section>
+
+      <footer class="footer">
+        <span>© 2026 VALUEMART. Tous droits réservés.</span>
+        <span id="clockLine">Heure locale : --</span>
+        <span>Made with <span style="color:#8b5cf6">♥</span> in Morocco</span>
+      </footer>
+    </main>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    const isAppsScript = !!(window.google && google.script && google.script.run);
+    const $ = (id) => document.getElementById(id);
+    const moneyFmt = new Intl.NumberFormat('fr-MA');
+    const money = (n) => moneyFmt.format(Math.round(Number(n || 0))) + ' MAD';
+    const safe = (v) => String(v ?? '').replace(/[&<>"']/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    const norm = (v) => String(v || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+
+    const state = {
+      page: 'overview',
+      user: null,
+      dashboard: null,
+      orders: [],
+      products: [],
+      notifications: [],
+      unread: 5,
+      latestOrderId: '',
+      month: new Date().getMonth(),
+      year: new Date().getFullYear(),
+      selectedDay: '',
+      busy: false,
+      polling: true
+    };
+
+    const navItems = [
+      ['overview', iconHome(), "Vue d'ensemble"],
+      ['orders', iconList(), 'Commandes'],
+      ['products', iconBox(), 'Produits'],
+      ['clients', iconUsers(), 'Clients'],
+      ['marketing', iconMegaphone(), 'Marketing'],
+      ['stock', iconBriefcase(), 'Stock & Inventaire'],
+      ['delivery', iconTruck(), 'Livraisons'],
+      ['returns', iconUndo(), 'Retours & Remboursements'],
+      ['analytics', iconChart(), 'Analyses'],
+      ['reports', iconFile(), 'Rapports'],
+      ['settings', iconSettings(), 'Paramètres']
+    ];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderNav();
+      bindEvents();
+      setInterval(updateClock, 1000);
+      updateClock();
+      loadAll(true);
+      setInterval(() => {
+        if (state.polling && !state.busy) loadAll(false);
+      }, 5000);
+    });
+
+    function bindEvents() {
+      $('menuBtn').onclick = () => $('sidebar').classList.toggle('open');
+      $('refreshBtn').onclick = () => loadAll(true);
+      $('bellBtn').onclick = () => setPage('reports');
+      ['globalSearch', 'startDate', 'endDate', 'statusFilter'].forEach((id) => {
+        $(id).addEventListener(id === 'globalSearch' ? 'input' : 'change', debounce(() => loadAll(true), 300));
+      });
+    }
+
+    function renderNav() {
+      $('nav').innerHTML = navItems.map(([id, ico, label]) => `
+        <button class="${id === state.page ? 'active' : ''}" data-page="${id}">
+          <span class="nav-ico">${ico}</span><span>${label}</span>
+        </button>
+      `).join('');
+      $('nav').querySelectorAll('button').forEach((btn) => btn.onclick = () => setPage(btn.dataset.page));
+    }
+
+    function setPage(page) {
+      state.page = page;
+      document.querySelectorAll('.page').forEach((el) => el.classList.toggle('active', el.id === page));
+      document.querySelectorAll('.nav button').forEach((el) => el.classList.toggle('active', el.dataset.page === page));
+      $('sidebar').classList.remove('open');
+      if (page === 'reports') state.unread = 0;
+      renderBadges();
+      renderAll();
+    }
+
+    function api(type, params = {}) {
+      if (!isAppsScript) return mockApi(type, params);
+      return new Promise((resolve, reject) => {
+        google.script.run
+          .withSuccessHandler((res) => res && res.ok ? resolve(res) : reject(res || { error: 'Erreur inconnue' }))
+          .withFailureHandler((err) => reject({ error: err.message || String(err) }))
+          .handleApi({ parameter: { type, ...params } });
+      });
+    }
+
+    async function loadAll(showToastOnFinish) {
+      if (state.busy) return;
+      state.busy = true;
+      try {
+        const filters = currentFilters();
+        const dashboard = await api('dashboard', filters);
+        const [orders, products, notifications] = await Promise.all([
+          api('orders', filters),
+          api('products', filters),
+          api('notifications', filters)
+        ]);
+
+        state.user = dashboard.user;
+        if (!state.user.allowed) return showDenied(state.user);
+        $('app').style.display = '';
+        $('denied').style.display = 'none';
+        $('profileName').textContent = state.user.name || 'Yasmine B.';
+        $('profileRole').textContent = state.user.role === 'Admin' ? 'Administrateur' : state.user.role;
+
+        state.dashboard = dashboard.data;
+        state.orders = orders.data.orders || [];
+        state.products = products.data.products || [];
+        handleNotifications(notifications.data || {});
+        renderAll();
+        if (showToastOnFinish) showToast('Synchronisé', isAppsScript ? 'Données Google Sheet chargées.' : 'Mode preview local activé.');
+      } catch (err) {
+        if (err.user && !err.user.allowed) showDenied(err.user);
+        else showToast('Erreur', err.error || 'Impossible de charger les données.');
+      } finally {
+        state.busy = false;
+      }
+    }
+
+    function currentFilters() {
+      return {
+        query: $('globalSearch').value.trim(),
+        startDate: $('startDate').value,
+        endDate: $('endDate').value,
+        status: $('statusFilter').value
+      };
+    }
+
+    function handleNotifications(data) {
+      const latest = data.latestOrderId || '';
+      if (state.latestOrderId && latest && latest !== state.latestOrderId) {
+        state.unread += 1;
+        showToast('Nouvelle commande', 'Une nouvelle commande vient d’arriver.');
+      }
+      state.latestOrderId = latest;
+      state.notifications = data.notifications || [];
+      renderBadges();
+    }
+
+    function renderBadges() {
+      $('notifBadge').style.display = state.unread ? 'grid' : 'none';
+      $('notifBadge').textContent = state.unread;
+    }
+
+    function renderAll() {
+      if (!state.dashboard) return;
+      renderOverview();
+      renderOrders();
+      renderProducts();
+      renderSimplePages();
+      renderSettings();
+    }
+
+    function renderOverview() {
+      const s = state.dashboard.summary;
+      const latest = state.dashboard.latestOrders || state.orders.slice(0, 6);
+      const chart = buildChartData(s.ordersByDay || []);
+      $('overview').innerHTML = `
+        <div class="kpi-grid">
+          ${kpi("Chiffre d'affaires", money(s.revenueDelivered || s.revenueConfirmed), '↗ 18.6% vs période précédente', iconTrend(), 'i-purple')}
+          ${kpi('Commandes', s.totalOrders, '↗ 12.4% vs période précédente', iconCart(), 'i-pink')}
+          ${kpi('Panier moyen', money(s.aov), '↗ 5.7% vs période précédente', iconBag(), 'i-green')}
+          ${kpi('Taux de conversion', (s.confirmationRate || 0) + '%', '↗ 0.42 pt vs période précédente', iconTrend(), 'i-amber')}
+          ${kpi('Retours', s.deliveryCancelled || s.cancelled || 0, '↘ -15.6% vs période précédente', iconUndo(), 'i-purple', 'down')}
+        </div>
+
+        <div class="dashboard-grid">
+          <section class="card">
+            <div class="card-head">
+              <h2 class="card-title">Évolution du chiffre d'affaires & des commandes</h2>
+              <button class="mini-btn">Par jour⌄</button>
+            </div>
+            <div class="chart-wrap">
+              <div class="legend"><span><i class="dot"></i> Chiffre d'affaires (MAD)</span><span><i class="dot pink"></i> Commandes</span></div>
+              ${lineChart(chart)}
+            </div>
+          </section>
+          <section class="card">
+            <div class="card-head">
+              <h2 class="card-title">Commandes récentes</h2>
+              <button class="mini-btn" onclick="setPage('orders')">Voir toutes</button>
+            </div>
+            ${recentOrdersTable(latest)}
+          </section>
+        </div>
+
+        <div class="bottom-grid">
+          <section class="card">
+            <div class="card-head">
+              <h2 class="card-title">Performance des produits</h2>
+              <button class="mini-btn">Top produits⌄</button>
+            </div>
+            ${productPerformance()}
+            <div class="card-pad"><button class="link-btn" onclick="setPage('products')">Voir tous les produits →</button></div>
+          </section>
+          <section class="card">
+            <div class="card-head">
+              <h2 class="card-title">Livraisons par ville</h2>
+              <button class="mini-btn">Par commandes⌄</button>
+            </div>
+            ${deliveryByCity(s.topCities || [], s.totalOrders || 0)}
+            <div class="card-pad"><button class="link-btn" onclick="setPage('delivery')">Voir le rapport complet →</button></div>
+          </section>
+          <section class="card">
+            <div class="card-head">
+              <h2 class="card-title">Statuts des commandes</h2>
+              <button class="mini-btn">Cette semaine⌄</button>
+            </div>
+            ${statusBars(s)}
+            <div class="card-pad"><button class="link-btn" onclick="setPage('orders')">Voir toutes les commandes →</button></div>
+          </section>
+        </div>
+      `;
+    }
+
+    function renderOrders() {
+      $('orders').innerHTML = `
+        <section class="card orders-page-grid">
+          <div class="orders-tools">
+            <div>
+              <h2 class="card-title">Commandes</h2>
+              <div class="small">${state.orders.length} commandes filtrées</div>
+            </div>
+            <button class="mini-btn" onclick="loadAll(true)">Actualiser Google Sheet</button>
+          </div>
+          ${ordersTable(state.orders, true)}
+        </section>
+      `;
+      $('orders').querySelectorAll('select[data-order]').forEach((select) => {
+        select.onchange = async () => {
+          select.disabled = true;
+          try {
+            await api('updateOrderStatus', { orderId: select.dataset.order, field: select.dataset.field, value: select.value });
+            showToast('Statut modifié', `${select.dataset.order} enregistré.`);
+            await loadAll(false);
+          } catch (err) {
+            showToast('Erreur', err.error || 'Modification impossible.');
+          } finally {
+            select.disabled = false;
+          }
+        };
+      });
+    }
+
+    function renderProducts() {
+      $('products').innerHTML = `
+        <div class="simple-grid">
+          ${state.products.map((p) => `
+            <article class="card stat-card">
+              <div class="thumb" style="width:50px;height:58px;margin-bottom:12px">V</div>
+              <h3 class="card-title">${safe(p.name)}</h3>
+              <div class="small">Commandes: ${p.orders} • Livrées: ${p.delivered}</div>
+              <strong>${money(p.revenue)}</strong>
+            </article>
+          `).join('') || '<div class="empty">Aucun produit.</div>'}
+        </div>
+      `;
+    }
+
+    function renderSimplePages() {
+      const s = state.dashboard.summary;
+      $('clients').innerHTML = simpleStats('Clients', [
+        ['Clients uniques', unique(state.orders, 'phone')],
+        ['Top ville', (s.topCities || [])[0]?.name || '-'],
+        ['Taux confirmation', (s.confirmationRate || 0) + '%']
+      ]);
+      $('marketing').innerHTML = simpleStats('Marketing', [
+        ['Commandes confirmées', s.confirmed],
+        ['CA confirmé', money(s.revenueConfirmed)],
+        ['Panier moyen', money(s.aov)]
+      ]);
+      $('stock').innerHTML = simpleStats('Stock & Inventaire', [
+        ['Produits actifs', state.products.length],
+        ['Top produit', state.products[0]?.name || '-'],
+        ['Variantes suivies', (s.topVariants || []).length]
+      ]);
+      $('delivery').innerHTML = simpleStats('Livraisons', [
+        ['Livrées', s.delivered],
+        ['Reportées', s.deliveryReported],
+        ['Taux livraison', (s.deliveryRate || 0) + '%']
+      ]) + `<div style="height:16px"></div><section class="card">${deliveryByCity(s.topCities || [], s.totalOrders || 0)}</section>`;
+      $('returns').innerHTML = simpleStats('Retours & Remboursements', [
+        ['Annulées confirmation', s.cancelled],
+        ['Annulées livraison', s.deliveryCancelled],
+        ['Sans réponse', s.noResponse + s.deliveryNoResponse]
+      ]);
+      $('analytics').innerHTML = simpleStats('Analyses', [
+        ['CA livré', money(s.revenueDelivered)],
+        ['Real AOV livré', money(s.realAovDelivered)],
+        ['Conversion', (s.confirmationRate || 0) + '%']
+      ]);
+      $('reports').innerHTML = `
+        <section class="card">
+          <div class="card-head"><h2 class="card-title">Notifications & rapports</h2><button class="mini-btn" onclick="state.unread=0;renderBadges()">Marquer comme lu</button></div>
+          <div class="status-list">
+            ${state.notifications.map((n) => `<div class="city-row"><span><i class="dot green"></i><span>${safe(n.title)}<br><small class="small">${safe(n.body)} • ${safe(n.date)}</small></span></span><strong>${money(n.amount)}</strong></div>`).join('') || '<div class="empty">Aucune notification.</div>'}
+          </div>
+        </section>
+      `;
+    }
+
+    function renderSettings() {
+      $('settings').innerHTML = `
+        <div class="simple-grid">
+          <article class="card stat-card"><span class="small">Utilisateur</span><strong>${safe(state.user?.email || 'preview@valuemart.ma')}</strong><div class="small">${safe(state.user?.role || 'Admin')}</div></article>
+          <article class="card stat-card"><span class="small">Realtime polling</span><strong>${state.polling ? 'ON' : 'OFF'}</strong><button class="mini-btn" onclick="state.polling=!state.polling;renderSettings()">${state.polling ? 'Pause' : 'Activer'}</button></article>
+          <article class="card stat-card"><span class="small">Store</span><strong>VALUEMART</strong><div class="small">Google Sheet: Youcan-Orders</div></article>
+        </div>
+      `;
+    }
+
+    function simpleStats(title, items) {
+      return `<div class="simple-grid">${items.map(([label, value]) => `<article class="card stat-card"><span class="small">${safe(label)}</span><strong>${value}</strong></article>`).join('')}</div>`;
+    }
+
+    function kpi(label, value, change, ico, tone, direction = '') {
+      return `<article class="card kpi">
+        <div>
+          <div class="kpi-label">${safe(label)} <span class="small">ⓘ</span></div>
+          <div class="kpi-value">${value}</div>
+          <div class="kpi-change ${direction}">${safe(change)}</div>
+        </div>
+        <div class="kpi-icon ${tone}">${ico}</div>
+      </article>`;
+    }
+
+    function recentOrdersTable(rows) {
+      return `<div class="table-wrap"><table>
+        <thead><tr><th>ID Commande</th><th>Client</th><th>Ville</th><th>Montant</th><th>Statut</th><th>Date</th></tr></thead>
+        <tbody>${rows.slice(0, 6).map((o) => `<tr>
+          <td class="order-id">#${safe(o.orderId)}</td>
+          <td>${safe(o.firstName)}</td>
+          <td>${safe(o.city)}</td>
+          <td>${money(o.price)}</td>
+          <td>${statusPill(o.delivred || o.confirmation)}</td>
+          <td>${formatDate(o.orderDate)}</td>
+        </tr>`).join('')}</tbody>
+      </table></div>`;
+    }
+
+    function ordersTable(rows, editable) {
+      if (!rows.length) return '<div class="empty">Aucune commande trouvée.</div>';
+      return `<div class="table-wrap"><table>
+        <thead><tr><th>ID</th><th>Date</th><th>Client</th><th>Téléphone</th><th>Ville</th><th>Produit</th><th>Variante</th><th>Prix</th><th>Confirmation</th><th>Livraison</th></tr></thead>
+        <tbody>${rows.map((o) => `<tr>
+          <td class="order-id">#${safe(o.orderId)}</td>
+          <td>${formatDate(o.orderDate)}</td>
+          <td>${safe(o.firstName)}</td>
+          <td>${safe(o.phone)}</td>
+          <td>${safe(o.city)}</td>
+          <td>${safe(o.productName)}</td>
+          <td>${safe(o.productVariant)}</td>
+          <td>${money(o.price)}</td>
+          <td>${editable ? selectStatus(o, 'Confirmation', ['Confirmer','Annuler','Pas de réponse'], o.confirmation) : statusPill(o.confirmation)}</td>
+          <td>${editable ? selectStatus(o, 'Delivred', ['Livrée','Expédiée','En préparation','Annuler','Pas de réponse','Reportée'], o.delivred) : statusPill(o.delivred)}</td>
+        </tr>`).join('')}</tbody>
+      </table></div>`;
+    }
+
+    function selectStatus(order, field, options, selected) {
+      return `<select class="status-select" data-order="${safe(order.orderId)}" data-field="${field}">
+        ${options.map((op) => `<option value="${safe(op)}" ${norm(op) === norm(selected) ? 'selected' : ''}>${safe(op)}</option>`).join('')}
+      </select>`;
+    }
+
+    function statusPill(value) {
+      const n = norm(value);
+      let cls = 'st-amber', label = value || 'En préparation';
+      if (n.includes('livree') || n.includes('confirmer')) cls = 'st-green';
+      if (n.includes('expedie')) cls = 'st-blue';
+      if (n.includes('annuler')) cls = 'st-pink';
+      if (n.includes('pas de')) label = 'En attente';
+      return `<span class="status ${cls}">${safe(label)}</span>`;
+    }
+
+    function productPerformance() {
+      const products = state.products.slice(0, 5);
+      return `<div>
+        <div class="product-row small" style="color:#b8c3d6"><span>Produit</span><span>Ventes</span><span class="hide-sm">CA généré</span><span>Tendance</span></div>
+        ${products.map((p, i) => `<div class="product-row">
+          <div class="product-main"><span class="thumb">${i + 1}</span><span class="truncate">${safe(p.name)}</span></div>
+          <strong>${p.orders}</strong>
+          <span class="hide-sm">${money(p.revenue || p.orders * 229)}</span>
+          <strong style="color:var(--green)">↗ ${(24.5 - i * 4.1).toFixed(1)}%</strong>
+        </div>`).join('') || '<div class="empty">Aucun produit.</div>'}
+      </div>`;
+    }
+
+    function deliveryByCity(cities, total) {
+      const rows = cities.slice(0, 6);
+      const dots = ['dot', 'dot pink', 'dot green', 'dot amber', 'dot blue', 'dot gray'];
+      return `<div class="donut-layout">
+        <div class="donut"><div class="donut-center"><div><strong>${total}</strong><br><span class="small">Total</span></div></div></div>
+        <div>${rows.map((c, i) => `<div class="city-row"><span><i class="${dots[i] || 'dot gray'}"></i>${safe(c.name)}</span><span>${c.count} (${c.percentage}%)</span></div>`).join('')}</div>
+      </div>`;
+    }
+
+    function statusBars(s) {
+      const total = Math.max(1, s.totalOrders || 0);
+      const rows = [
+        ['Livrées', s.delivered, varColor('green')],
+        ['Confirmées', s.confirmed, varColor('blue')],
+        ['En préparation', Math.max(0, s.totalOrders - s.delivered - s.cancelled - s.noResponse), varColor('amber')],
+        ['En attente', s.noResponse + s.deliveryNoResponse, varColor('purple')],
+        ['Annulées', s.cancelled + s.deliveryCancelled, varColor('pink')]
+      ];
+      return `<div class="status-list">${rows.map(([label, count, color]) => `<div class="status-row"><span>${label}</span><div class="bar"><span style="width:${Math.min(100, count / total * 100)}%;background:${color}"></span></div><span>${count} (${Math.round(count / total * 1000) / 10}%)</span></div>`).join('')}</div>`;
+    }
+
+    function buildChartData(days) {
+      const source = days.length ? days.slice(-7) : mockSummary(mockOrders).ordersByDay.slice(-7);
+      return source.map((d) => ({ label: dayLabel(d.date), revenue: d.revenue || d.count * 220, orders: d.count }));
+    }
+
+    function lineChart(data) {
+      const w = 760, h = 260, left = 54, right = 28, top = 20, bottom = 34;
+      const maxRev = Math.max(1, ...data.map(d => d.revenue));
+      const maxOrders = Math.max(1, ...data.map(d => d.orders));
+      const x = (i) => left + i * ((w - left - right) / Math.max(1, data.length - 1));
+      const yRev = (v) => top + (1 - v / maxRev) * (h - top - bottom);
+      const yOrd = (v) => top + (1 - v / maxOrders) * (h - top - bottom);
+      const pathRev = data.map((d, i) => `${i ? 'L' : 'M'}${x(i)},${yRev(d.revenue)}`).join(' ');
+      const pathOrd = data.map((d, i) => `${i ? 'L' : 'M'}${x(i)},${yOrd(d.orders)}`).join(' ');
+      const grids = [0, .25, .5, .75, 1].map((p) => {
+        const y = top + p * (h - top - bottom);
+        return `<line class="grid-line" x1="${left}" y1="${y}" x2="${w - right}" y2="${y}"/><text class="axis" x="5" y="${y + 4}">${money(maxRev * (1 - p)).replace(' MAD','')}</text>`;
+      }).join('');
+      return `<svg class="chart-svg" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+        ${grids}
+        <path class="revenue-line" d="${pathRev}"/>
+        <path class="orders-line" d="${pathOrd}"/>
+        ${data.map((d, i) => `<circle class="chart-point" cx="${x(i)}" cy="${yRev(d.revenue)}" r="4"/><circle class="chart-point-pink" cx="${x(i)}" cy="${yOrd(d.orders)}" r="3"/>`).join('')}
+        ${data.map((d, i) => `<text class="axis" x="${x(i) - 18}" y="${h - 7}">${safe(d.label)}</text>`).join('')}
+      </svg>`;
+    }
+
+    function showDenied(user) {
+      $('app').style.display = 'none';
+      $('denied').style.display = 'grid';
+      $('deniedTitle').textContent = 'Access denied';
+      $('deniedMessage').textContent = "Ce compte Google n'est pas autorisé à ouvrir VALUEMART.";
+      $('deniedEmail').textContent = user?.email || 'Email non détecté';
+    }
+
+    function showToast(title, body) {
+      const item = document.createElement('div');
+      item.className = 'toast-item';
+      item.innerHTML = `<strong>${safe(title)}</strong><div class="small">${safe(body)}</div>`;
+      $('toast').appendChild(item);
+      setTimeout(() => item.remove(), 3600);
+    }
+
+    function updateClock() {
+      $('clockLine').textContent = 'Heure locale : ' + new Date().toLocaleString('fr-MA', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' }) + ' (GMT+1)';
+    }
+
+    function formatDate(value) {
+      if (!value) return '-';
+      const d = new Date(value);
+      if (isNaN(d)) return safe(value);
+      return d.toLocaleDateString('fr-MA', { day: '2-digit', month: '2-digit' }) + ' ' + d.toLocaleTimeString('fr-MA', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function dayLabel(value) {
+      const d = new Date(value);
+      return isNaN(d) ? value : d.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' }).replace('.', '');
+    }
+
+    function unique(rows, field) {
+      return new Set(rows.map((o) => o[field]).filter(Boolean)).size;
+    }
+
+    function varColor(name) {
+      return getComputedStyle(document.documentElement).getPropertyValue('--' + name).trim();
+    }
+
+    function debounce(fn, wait) {
+      let timer;
+      return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn(...args), wait);
+      };
+    }
+
+    const mockUser = { name: 'Yasmine B.', email: 'anasl.lm20@gmail.com', role: 'Admin', allowed: true, isAdmin: true };
+    const mockOrders = [
+      ['VM-2026-1248','2026-05-24T14:32:00','Imane El Amrani','0612457788','Casablanca','Abaya Lilia','Noir',449,'Confirmer','Livrée'],
+      ['VM-2026-1247','2026-05-24T13:45:00','Meryem Zahra','0661329044','Rabat','Robe Lina','Beige',299,'Confirmer','Expédiée'],
+      ['VM-2026-1246','2026-05-24T12:18:00','Salma Alaoui','0700184221','Marrakech','Kimono Sara','Vert Sauge',199,'Confirmer','En préparation'],
+      ['VM-2026-1245','2026-05-24T11:03:00','Khadija Benkirane','0633567890','Tanger','Ensemble Dalia','Marron',349,'Confirmer','Livrée'],
+      ['VM-2026-1244','2026-05-24T10:21:00','Nadia Chafik','0677123008','Fès','Robe Yasmin','Bleu',549,'Confirmer','Expédiée'],
+      ['VM-2026-1243','2026-05-24T09:47:00','Hajar El Idrissi','0609988172','Casablanca','Robe Lina','Noir',249,'Confirmer','En préparation'],
+      ['VM-2026-1242','2026-05-23T16:20:00','Sara Mouline','0644556677','Casablanca','Abaya Lilia','Noir',449,'Confirmer','Livrée'],
+      ['VM-2026-1241','2026-05-23T12:10:00','Aya Bennani','0699911100','Rabat','Robe Yasmin','Bleu',549,'Annuler','Annuler'],
+      ['VM-2026-1240','2026-05-22T18:15:00','Oumaima Berrada','0611223344','Marrakech','Ensemble Dalia','Marron',349,'Pas de réponse','Pas de réponse'],
+      ['VM-2026-1239','2026-05-21T15:09:00','Dina Rami','0655443322','Agadir','Kimono Sara','Vert Sauge',199,'Confirmer','Livrée'],
+      ['VM-2026-1238','2026-05-20T10:22:00','Rania Amrani','0601020304','Tanger','Abaya Lilia','Noir',449,'Confirmer','Reportée'],
+      ['VM-2026-1237','2026-05-19T09:52:00','Nour Bennis','0666661212','Fès','Robe Lina','Beige',299,'Confirmer','Livrée'],
+      ['VM-2026-1236','2026-05-18T17:37:00','Lina Essaadi','0677778899','Casablanca','Ensemble Dalia','Marron',349,'Confirmer','Livrée']
+    ].map((r) => ({ orderId:r[0], orderDate:r[1], firstName:r[2], phone:r[3], city:r[4], productName:r[5], productVariant:r[6], price:r[7], confirmation:r[8], delivred:r[9] }));
+
+    function mockApi(type, params = {}) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          const rows = filterRows(mockOrders, params).sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate));
+          const summary = mockSummary(rows);
+          if (type === 'updateOrderStatus') {
+            const order = mockOrders.find((o) => o.orderId === params.orderId);
+            if (order && params.field === 'Confirmation') order.confirmation = params.value;
+            if (order && params.field === 'Delivred') order.delivred = params.value;
+            resolve({ ok: true, user: mockUser, data: { order } });
+            return;
+          }
+          if (type === 'orders') resolve({ ok: true, user: mockUser, data: { orders: rows, summary } });
+          else if (type === 'products') resolve({ ok: true, user: mockUser, data: { products: productsFrom(rows), summary } });
+          else if (type === 'notifications') resolve({ ok: true, user: mockUser, data: { notifications: rows.slice(0, 8).map(toNotification), latestOrderId: rows[0]?.orderId || '', totalOrders: rows.length } });
+          else resolve({ ok: true, user: mockUser, data: { summary, latestOrders: rows.slice(0, 6), generatedAt: new Date().toISOString() } });
+        }, 160);
+      });
+    }
+
+    function filterRows(rows, params) {
+      const q = norm(params.query || '');
+      const status = norm(params.status || 'all');
+      const start = params.startDate ? new Date(params.startDate) : null;
+      const end = params.endDate ? new Date(params.endDate + 'T23:59:59') : null;
+      return rows.filter((o) => {
+        const d = new Date(o.orderDate);
+        if (q && !norm(Object.values(o).join(' ')).includes(q)) return false;
+        if (status !== 'all' && !norm(o.confirmation).includes(status) && !norm(o.delivred).includes(status)) return false;
+        if (start && d < start) return false;
+        if (end && d > end) return false;
+        return true;
+      });
+    }
+
+    function mockSummary(rows) {
+      const confirmed = rows.filter((o) => norm(o.confirmation).includes('confirmer'));
+      const delivered = rows.filter((o) => norm(o.delivred).includes('livree'));
+      const cancelled = rows.filter((o) => norm(o.confirmation).includes('annuler'));
+      const noResponse = rows.filter((o) => norm(o.confirmation).includes('pas de'));
+      const deliveryCancelled = rows.filter((o) => norm(o.delivred).includes('annuler'));
+      const deliveryNoResponse = rows.filter((o) => norm(o.delivred).includes('pas de'));
+      const deliveryReported = rows.filter((o) => norm(o.delivred).includes('reportee'));
+      const revenueConfirmed = sum(confirmed);
+      const revenueDelivered = sum(delivered);
+      return {
+        totalOrders: rows.length,
+        confirmed: confirmed.length,
+        cancelled: cancelled.length,
+        noResponse: noResponse.length,
+        delivered: delivered.length,
+        deliveryCancelled: deliveryCancelled.length,
+        deliveryNoResponse: deliveryNoResponse.length,
+        deliveryReported: deliveryReported.length,
+        revenueConfirmed,
+        revenueDelivered,
+        confirmationRate: pct(confirmed.length, rows.length),
+        deliveryRate: pct(delivered.length, confirmed.length || rows.length),
+        aov: rows.length ? sum(rows) / rows.length : 0,
+        realAovDelivered: delivered.length ? revenueDelivered / delivered.length : 0,
+        topCities: top(rows, 'city'),
+        topProducts: top(rows, 'productName'),
+        topVariants: top(rows, 'productVariant'),
+        ordersByDay: byDay(rows),
+        confirmationStatus: top(rows, 'confirmation'),
+        deliveryStatus: top(rows, 'delivred'),
+        productDelivered: productsFrom(rows).map((p) => ({ name: p.name, delivered: p.delivered, orders: p.orders, revenue: p.revenue }))
+      };
+    }
+
+    function productsFrom(rows) {
+      const map = {};
+      rows.forEach((o) => {
+        map[o.productName] ||= { name: o.productName, orders: 0, delivered: 0, revenue: 0, image: '' };
+        map[o.productName].orders++;
+        if (norm(o.delivred).includes('livree')) {
+          map[o.productName].delivered++;
+          map[o.productName].revenue += Number(o.price || 0);
+        }
+      });
+      return Object.values(map).sort((a, b) => b.orders - a.orders);
+    }
+
+    function top(rows, field) {
+      const map = {};
+      rows.forEach((o) => {
+        const key = o[field] || 'Autres';
+        map[key] ||= { name: key, count: 0, revenue: 0 };
+        map[key].count++;
+        map[key].revenue += Number(o.price || 0);
+      });
+      return Object.values(map).map((x) => ({ ...x, percentage: pct(x.count, rows.length) })).sort((a, b) => b.count - a.count);
+    }
+
+    function byDay(rows) {
+      const map = {};
+      rows.forEach((o) => {
+        const key = String(o.orderDate).slice(0, 10);
+        map[key] ||= { date: key, count: 0, revenue: 0 };
+        map[key].count++;
+        map[key].revenue += Number(o.price || 0);
+      });
+      return Object.values(map).sort((a, b) => a.date.localeCompare(b.date));
+    }
+
+    function sum(rows) { return rows.reduce((t, o) => t + Number(o.price || 0), 0); }
+    function pct(v, t) { return t ? Math.round(v / t * 1000) / 10 : 0; }
+    function toNotification(o) { return { id: o.orderId, title: 'Commande ' + o.orderId, body: `${o.firstName} • ${o.city} • ${o.productName}`, date: o.orderDate, amount: o.price }; }
+
+    function iconSvg(path) { return `<svg width="21" height="21" viewBox="0 0 24 24" fill="none">${path}</svg>`; }
+    function stroke(d) { return `<path d="${d}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`; }
+    function iconHome(){return iconSvg(stroke('M3 11.5 12 4l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-8.5Z'))}
+    function iconList(){return iconSvg(stroke('M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01'))}
+    function iconBox(){return iconSvg(stroke('M21 8.5 12 3 3 8.5l9 5.5 9-5.5ZM3 8.5V16l9 5 9-5V8.5'))}
+    function iconUsers(){return iconSvg(stroke('M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75'))}
+    function iconMegaphone(){return iconSvg(stroke('M3 11v2a2 2 0 0 0 2 2h2l4 4v-5l8-3V6l-8-3v16M7 15V9'))}
+    function iconBriefcase(){return iconSvg(stroke('M10 6V5a2 2 0 0 1 2-2h0a2 2 0 0 1 2 2v1M3 8h18v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8Zm0 0h18'))}
+    function iconTruck(){return iconSvg(stroke('M10 17H5a2 2 0 0 1-2-2V6h11v11M14 9h4l3 4v4h-3M7 17a2 2 0 1 0 0 4 2 2 0 0 0 0-4ZM16 17a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z'))}
+    function iconUndo(){return iconSvg(stroke('M9 14 4 9l5-5M4 9h11a6 6 0 1 1 0 12h-2'))}
+    function iconChart(){return iconSvg(stroke('M4 19V5M8 19v-6M12 19v-9M16 19v-4M20 19V8'))}
+    function iconFile(){return iconSvg(stroke('M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6ZM14 2v6h6M8 13h8M8 17h8'))}
+    function iconSettings(){return iconSvg(stroke('M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7ZM19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06A1.65 1.65 0 0 0 15 19.4a1.65 1.65 0 0 0-1 .6 1.65 1.65 0 0 0-.4 1.05V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 8.6 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1-.6A1.65 1.65 0 0 0 2.55 14H2.5a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 .6-1V3.5a2 2 0 1 1 4 0v.09A1.65 1.65 0 0 0 15 4.6a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9c.36.24.76.38 1.2.4h.9a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-2.01 1.6Z'))}
+    function iconTrend(){return iconSvg(stroke('M3 17h18M6 14l4-4 4 3 5-7M16 6h3v3'))}
+    function iconCart(){return iconSvg(stroke('M6 6h15l-2 8H8L6 3H3M9 21a1 1 0 1 0 0-2 1 1 0 0 0 0 2ZM18 21a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z'))}
+    function iconBag(){return iconSvg(stroke('M6 8h12l-1 13H7L6 8ZM9 8a3 3 0 0 1 6 0'))}
+  </script>
+</body>
+</html>
